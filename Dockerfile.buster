@@ -8,3 +8,5 @@ RUN apt update -y \
     && rm -rf /var/lib/apt/lists/* \
     && curl -sSfL https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-$(uname -m).sh -o cmake-installer.sh \
     && sh cmake-installer.sh --skip-license --prefix=/usr
+
+COPY make.sh /etc/profile.d/make.sh
