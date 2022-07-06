@@ -1,0 +1,12 @@
+name: 'Setup build tools'
+description: 'Install and setup all build tools'
+
+runs:
+  using: 'composite'
+  steps:
+    - shell: bash
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo apt update -y
+        sudo apt install -y build-essential devscripts debhelper dh-make quilt debootstrap dh-apache2

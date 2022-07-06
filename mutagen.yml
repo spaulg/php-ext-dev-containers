@@ -1,0 +1,20 @@
+sync:
+  php-ext-dev-containers:
+    alpha: '.'
+    beta: 'php-ext-dev-containers:/home/vagrant/php-ext-dev-containers'
+    mode: 'two-way-resolved'
+    flushOnCreate: true
+    ignore:
+      vcs: true
+      paths:
+        - '*.yml.lock'
+        - '.idea/'
+        - '**/.vagrant/**'
+        - '**/venv/**'
+        - '**/__pycache__/**'
+    configurationBeta:
+      permissions:
+        defaultOwner: vagrant
+        defaultGroup: vagrant
+        defaultFileMode: 644
+        defaultDirectoryMode: 755
