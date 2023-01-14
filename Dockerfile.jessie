@@ -3,7 +3,8 @@ ARG PHP_VERSION
 FROM php:${PHP_VERSION}-jessie
 ARG CMAKE_VERSION
 
-RUN apt update -y \
+RUN apt-key update \
+    && apt update -y \
     && apt install -y build-essential autoconf clang-6.0 git curl libcurl3 libcurl3-openssl-dev \
     && rm -rf /var/lib/apt/lists/* \
     && curl -sSfL https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-$(uname -m).sh -o cmake-installer.sh \
