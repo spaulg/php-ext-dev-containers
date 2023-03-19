@@ -2,6 +2,10 @@ def local_cache_path(basebox_name)
   File.expand_path(File.join('~/.vagrant.d/cache/apt/', basebox_name))
 end
 
+def total_cpus
+  require 'etc'
+  Etc.nprocessors
+end
 
 Vagrant.configure("2") do |config|
   config.vagrant.plugins = ["vagrant-hostmanager", "vagrant-mutagen-project"]
@@ -16,13 +20,13 @@ Vagrant.configure("2") do |config|
 
   # Configure the virtualbox provider
   config.vm.provider "virtualbox" do |p, override|
-    p.cpus = 4
+    p.cpus = total_cpus - 2
     p.memory = 4096
   end
 
   # Configure the parallels provider
   config.vm.provider "parallels" do |p, override|
-    p.cpus = 4
+    p.cpus = total_cpus - 2
     p.memory = 4096
   end
 
