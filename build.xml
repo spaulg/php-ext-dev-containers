@@ -79,8 +79,10 @@
             <arg line="--strip-components=1"/>
         </exec>
 
+        <mkdir dir="build/${version}/debian" />
+
         <exec executable="rsync" failonerror="true">
-            <arg line="-arq packages/${version}/ build/${version}/"/>
+            <arg line="-arq packages/${version}/ build/${version}/debian/"/>
         </exec>
     </target>
 
