@@ -5,7 +5,7 @@
     <target name="init" depends="init_pbuilder" description="Initialise the build environment"/>
     <!-- <target name="clean" depends="clean_build_target" description="Clean a specific version"/> -->
     <target name="prepare" depends="prepare_metadata,prepare_build_target" description="Prepare a build environment for a specific version"/>
-    <target name="build" depends="prepare,build_changelog,build_dsc,build_package" description="Build a specific version"/>
+    <target name="build" depends="prepare,build_changelog,build_package" description="Build a specific version"/>
 
     <target name="init_pbuilder">
         <exec executable="pbuilder" failonerror="true">
@@ -97,10 +97,16 @@
     </target>
 
     <target name="build_package">
-        <exec executable="pbuilder" failonerror="true">
-            <arg line="build"/>
-            <arg line="--host-arch ${native_architecture}"/>
-            <arg line="packages/php${version}${suffix}_${full_version}-1.dsc"/>
+        <exec executable="sbuild" dir="packages/${version}" failonerror="true">
+            <arg line="-d bullseye-arm64"/>
+            <arg line="--no-apt-update"/>
+            <arg line="-j4"/>
         </exec>
+
+<!--        <exec executable="pbuilder" failonerror="true">-->
+<!--            <arg line="build"/>-->
+<!--            <arg line="&#45;&#45;host-arch ${native_architecture}"/>-->
+<!--            <arg line="packages/php${version}${suffix}_${full_version}-1.dsc"/>-->
+<!--        </exec>-->
     </target>
 </project>
