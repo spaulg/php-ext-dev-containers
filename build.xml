@@ -3,7 +3,7 @@
     <property name="suffix" value=""/>
 
     <target name="init" depends="init_pbuilder" description="Initialise the build environment"/>
-    <target name="clean" depends="clean_build_target" description="Clean a specific version"/>
+    <!-- <target name="clean" depends="clean_build_target" description="Clean a specific version"/> -->
     <target name="prepare" depends="prepare_metadata,prepare_build_target" description="Prepare a build environment for a specific version"/>
     <target name="build" depends="prepare,build_changelog,build_dsc,build_package" description="Build a specific version"/>
 
@@ -15,6 +15,7 @@
         </exec>
     </target>
 
+    <!--
     <target name="clean_build_target">
         <delete dir="build/${version}"/>
         <delete>
@@ -23,26 +24,25 @@
 
         <delete file="build/.${version}-metadata.json"/>
     </target>
+    -->
 
     <target name="prepare_metadata">
-        <mkdir dir="build" />
-
         <get
             src="https://www.php.net/releases/index.php?json&amp;version=${version}"
-            dest="build/.${version}-metadata.json"
+            dest="packages/.${version}-metadata.json"
             skipexisting="true"
         />
 
         <exec executable="jq" outputproperty="filename" failonerror="true">
-            <arg line="-r '.source[0].filename' build/.${version}-metadata.json"/>
+            <arg line="-r '.source[0].filename' packages/.${version}-metadata.json"/>
         </exec>
 
         <exec executable="jq" outputproperty="museum" failonerror="true">
-            <arg line="-r '.museum' build/.${version}-metadata.json"/>
+            <arg line="-r '.museum' packages/.${version}-metadata.json"/>
         </exec>
 
         <exec executable="jq" outputproperty="major_version" failonerror="true">
-            <arg line="-r '.version | split(&quot;.&quot;) | first' build/.${version}-metadata.json"/>
+            <arg line="-r '.version | split(&quot;.&quot;) | first' packages/.${version}-metadata.json"/>
         </exec>
 
         <exec executable="dpkg" outputproperty="native_architecture" failonerror="true">
@@ -51,7 +51,7 @@
         <echo message="Native architecture: ${native_architecture}"/>
 
         <exec executable="jq" outputproperty="full_version" failonerror="true">
-            <arg line="-r '.version' build/.${version}-metadata.json"/>
+            <arg line="-r '.version' packages/.${version}-metadata.json"/>
         </exec>
         <echo message="Full version: ${full_version}"/>
 
@@ -66,30 +66,22 @@
     <target name="prepare_build_target">
         <get
             src="${source_url}"
-            dest="build/php${version}${suffix}_${full_version}.orig.tar.gz"
+            dest="packages/php${version}${suffix}_${full_version}.orig.tar.gz"
             skipexisting="true"
         />
 
-        <mkdir dir="build/${version}" />
-
         <exec executable="tar" failonerror="true">
             <arg line="-xz"/>
-            <arg line="-f &quot;build/php${version}${suffix}_${full_version}.orig.tar.gz&quot;"/>
-            <arg line="-C &quot;build/${version}&quot;"/>
+            <arg line="-f &quot;packages/php${version}${suffix}_${full_version}.orig.tar.gz&quot;"/>
+            <arg line="-C &quot;packages/${version}&quot;"/>
             <arg line="--strip-components=1"/>
-        </exec>
-
-        <mkdir dir="build/${version}/debian" />
-
-        <exec executable="rsync" failonerror="true">
-            <arg line="-arq packages/${version}/ build/${version}/debian/"/>
         </exec>
     </target>
 
     <target name="build_changelog">
-        <delete file="build/${version}/debian/changelog"/>
+        <delete file="packages/${version}/debian/changelog"/>
 
-        <exec executable="debchange" dir="build/${version}" failonerror="true">
+        <exec executable="debchange" dir="packages/${version}" failonerror="true">
             <arg line="--create"/>
             <arg line="--package &quot;php${version}${suffix}&quot;"/>
             <arg line="--distribution stable"/>
@@ -99,7 +91,7 @@
     </target>
 
     <target name="build_dsc">
-        <exec executable="dpkg-buildpackage" dir="build/${version}" failonerror="true">
+        <exec executable="dpkg-buildpackage" dir="packages/${version}" failonerror="true">
             <arg line="-S -d"/>
         </exec>
     </target>
@@ -108,7 +100,7 @@
         <exec executable="pbuilder" failonerror="true">
             <arg line="build"/>
             <arg line="--host-arch ${native_architecture}"/>
-            <arg line="build/php${version}${suffix}_${full_version}-1.dsc"/>
+            <arg line="packages/php${version}${suffix}_${full_version}-1.dsc"/>
         </exec>
     </target>
 </project>
