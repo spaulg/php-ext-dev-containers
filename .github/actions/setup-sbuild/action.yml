@@ -1,0 +1,21 @@
+name: 'Setup pbuilder'
+description: 'Setup the pbuilder environment'
+
+inputs:
+  sbuildrc-file:
+    description: 'Path to a sbuildrc configuration file'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - shell: bash
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo apt update -y
+        sudo apt install -y sbuild ubuntu-dev-tools debian-archive-keyring
+
+    - shell: bash
+      run: |
+        cp "${{ inputs.config-path }}" $HOME/.sbuildrc

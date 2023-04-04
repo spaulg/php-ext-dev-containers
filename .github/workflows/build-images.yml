@@ -35,16 +35,18 @@ jobs:
       - name: Setup build tools
         uses: ./.github/actions/setup-build-tools
 
-      - name: Setup pbuilder
-        uses: ./.github/actions/setup-pbuilder
+      - name: Setup sbuild
+        uses: ./.github/actions/setup-sbuild
+        with:
+          sbuildrc-path: 'configs/sbuildrc.pm'
 
       - name: Init native pbuilder base
         run: |
-          sudo ant init
+          ant init
 
       - name: Build native packages
         run: |
-          sudo ant build -Dversion=${{ matrix.short_version }}
+          ant build -Dversion=${{ matrix.short_version }}
 
       - name: Save deb files to build
         if: success()

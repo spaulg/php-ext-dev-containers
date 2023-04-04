@@ -33,7 +33,7 @@ This is limited to Mac or Linux.
 vagrant up
 vagrant ssh
 
-sudo ant init
+ant init
 ```
 
 ### Building
@@ -45,5 +45,5 @@ files for both arm64 and amd64 architectures and package in to a container image
 
 ```
 cd php-ext-dev-containers
-sudo ant build -Dversion=7.4
+ant build -Dversion=7.4
 ```

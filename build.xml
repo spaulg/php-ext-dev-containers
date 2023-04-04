@@ -1,30 +1,17 @@
 <project>
+    <property runtime="runtime"/>
     <property name="version" value=""/>
     <property name="suffix" value=""/>
 
-    <target name="init" depends="init_pbuilder" description="Initialise the build environment"/>
-    <!-- <target name="clean" depends="clean_build_target" description="Clean a specific version"/> -->
+    <target name="init" depends="init_sbuild" description="Initialise the build environment"/>
     <target name="prepare" depends="prepare_metadata,prepare_build_target" description="Prepare a build environment for a specific version"/>
     <target name="build" depends="prepare,build_changelog,build_package" description="Build a specific version"/>
 
-    <target name="init_pbuilder">
-        <exec executable="pbuilder" failonerror="true">
-            <arg line="create"/>
-            <arg line="--distribution bullseye"/>
-            <arg line="--mirror https://deb.debian.org/debian"/>
+    <target name="init_sbuild">
+        <exec executable="mk-sbuild" failonerror="true">
+            <arg line="bullseye"/>
         </exec>
     </target>
-
-    <!--
-    <target name="clean_build_target">
-        <delete dir="build/${version}"/>
-        <delete>
-            <fileset dir="build/" includes="php${version}_*"/>
-        </delete>
-
-        <delete file="build/.${version}-metadata.json"/>
-    </target>
-    -->
 
     <target name="prepare_metadata">
         <get
@@ -75,6 +62,7 @@
             <arg line="-f &quot;packages/php${version}${suffix}_${full_version}.orig.tar.gz&quot;"/>
             <arg line="-C &quot;packages/${version}&quot;"/>
             <arg line="--strip-components=1"/>
+            <arg line="--exclude debian"/>
         </exec>
     </target>
 
@@ -90,23 +78,10 @@
         </exec>
     </target>
 
-    <target name="build_dsc">
-        <exec executable="dpkg-buildpackage" dir="packages/${version}" failonerror="true">
-            <arg line="-S -d"/>
-        </exec>
-    </target>
-
     <target name="build_package">
         <exec executable="sbuild" dir="packages/${version}" failonerror="true">
             <arg line="-d bullseye-arm64"/>
-            <arg line="--no-apt-update"/>
-            <arg line="-j4"/>
+            <arg line="-j${runtime.availableProcessors}"/>
         </exec>
-
-<!--        <exec executable="pbuilder" failonerror="true">-->
-<!--            <arg line="build"/>-->
-<!--            <arg line="&#45;&#45;host-arch ${native_architecture}"/>-->
-<!--            <arg line="packages/php${version}${suffix}_${full_version}-1.dsc"/>-->
-<!--        </exec>-->
     </target>
 </project>
