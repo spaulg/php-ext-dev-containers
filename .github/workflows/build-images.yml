@@ -42,7 +42,7 @@ jobs:
 
       - name: Init native pbuilder base
         run: |
-          ant init
+          sudo -u "$USER" -E -s ant init
 
       - name: Build native packages
         run: |
