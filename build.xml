@@ -1,4 +1,5 @@
 <project>
+    <property name="distribution" value="bullseye"/>
     <property runtime="runtime"/>
     <property name="version" value=""/>
     <property name="suffix" value=""/>
@@ -9,7 +10,7 @@
 
     <target name="init_sbuild">
         <exec executable="mk-sbuild" failonerror="true">
-            <arg line="bullseye"/>
+            <arg line="${distribution}"/>
         </exec>
     </target>
 
@@ -80,7 +81,7 @@
 
     <target name="build_package">
         <exec executable="sbuild" dir="packages/${version}" failonerror="true">
-            <arg line="-d bullseye-arm64"/>
+            <arg line="-d ${distribution}-${native_architecture}"/>
             <arg line="-j${runtime.availableProcessors}"/>
         </exec>
     </target>
