@@ -52,7 +52,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: 'Build logs'
+          name: '${{ matrix.version }} build logs'
           path: 'logs/**/*'
 
       - name: Save deb files to build
