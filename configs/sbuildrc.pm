@@ -1,6 +1,6 @@
 # Name to use as override in .changes files for the Maintainer: field
 # (mandatory, no default!).
-$maintainer_name='Your Name <user@example.org>';
+$maintainer_name = 'Simon Paulger <spaulger@codezen.co.uk>';
 
 # Default distribution to build.
 $distribution = "bullseye";
@@ -13,8 +13,10 @@ $purge_build_directory = 'successful';
 $purge_session = 'successful';
 $purge_build_deps = 'successful';
 
-# Directory for writing build logs to
-$log_dir=$ENV{HOME}."/php-ext-dev-containers/logs";
+# Logging options
+$verbose = 1;
+$nolog = 0;
+$log_dir = $ENV{HOME} . "/php-ext-dev-containers/logs";
 
 # Disable apt updates/upgrades when building
 $apt_update = 0;
