@@ -34,9 +34,6 @@ jobs:
 
       - name: Setup build tools
         uses: ./.github/actions/setup-build-tools
-
-      - name: Setup sbuild
-        uses: ./.github/actions/setup-sbuild
         with:
           sbuildrc-file: 'configs/sbuildrc.pm'
 
