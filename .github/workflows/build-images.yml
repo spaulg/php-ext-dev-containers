@@ -48,6 +48,13 @@ jobs:
         run: |
           sudo -u "$USER" -E -s ant build -Dversion=${{ matrix.short_version }}
 
+      - name: Attach build logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: 'Build logs'
+          path: 'logs/**/*'
+
       - name: Save deb files to build
         if: success()
         uses: actions/upload-artifact@v3
