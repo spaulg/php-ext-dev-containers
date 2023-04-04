@@ -19,5 +19,4 @@ runs:
     - shell: bash
       run: |
         sudo sbuild-adduser $USER
-        newgrp sbuild
         cp "${{ inputs.sbuildrc-file }}" $HOME/.sbuildrc

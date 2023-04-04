@@ -46,6 +46,8 @@ jobs:
 
       - name: Build native packages
         run: |
+          id
+          sudo su -u "$USER" - id
           ant build -Dversion=${{ matrix.short_version }}
 
       - name: Save deb files to build
