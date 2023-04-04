@@ -18,4 +18,4 @@ runs:
 
     - shell: bash
       run: |
-        cp "${{ inputs.config-path }}" $HOME/.sbuildrc
+        cp "${{ inputs.sbuildrc-file }}" $HOME/.sbuildrc
