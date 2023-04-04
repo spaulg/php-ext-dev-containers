@@ -37,7 +37,7 @@ jobs:
         with:
           sbuildrc-file: 'configs/sbuildrc.pm'
 
-      - name: Init native pbuilder base
+      - name: Init build environment
         run: |
           sudo -u "$USER" -E -s ant init
 
@@ -60,7 +60,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.version }}
-          path: '/var/cache/pbuilder/result/**/*.deb'
+          path: 'packages/*.deb'
 
 
 
