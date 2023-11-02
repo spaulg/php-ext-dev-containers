@@ -1,4 +1,3 @@
-
 # Introduction
 
 This repository is a suite of scripts/tools for building docker containers
@@ -16,34 +15,21 @@ Objectives of the project are to:
 4. produce builds for both arm64 and amd64 architectures
 5. automate the process
 
-### Local development environment
-
-The local development environment uses Vagrant with Mutagen for synchronisation of files.
-This is limited to Mac or Linux.
-
-#### Installation
-
-1. Install Vagrant
-2. Install a hypervisor (Virtualbox or Parallels)
-3. Install Mutagen
-
-#### Starting the environment
-
-```
-vagrant up
-vagrant ssh
-
-ant init
-```
-
 ### Building
 
-Use the Apache ant build script, passing the desired PHP major/minor version combination.
+Earthly is used to compile PHP in to a debian package and build the docker image 
+in a two stage process.
 
-This will download and build the latest patch release for that version, create the .deb
-files for both arm64 and amd64 architectures and package in to a container image. 
+Non zts:
 
 ```
-cd php-ext-dev-containers
-ant build -Dversion=7.4
+earthly +build --platform=amd64 --version=8.2.6
+earthly +package --platform=amd64 --version=8.2.6
+```
+
+ZTS:
+
+```
+earthly +build --platform=amd64 --version=8.2.6 --suffix=zts
+earthly +package --platform=amd64 --version=8.2.6 --suffix=zts
 ```
