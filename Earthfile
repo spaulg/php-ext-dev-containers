@@ -38,6 +38,8 @@ build:
     # Build the package
     RUN debuild -us -uc -a${architecture} > /tmp/build.${architecture}.log 2>&1; echo $? > /tmp/build.${architecture}.status
 
+    RUN ls -lh /home/build/packages
+
     SAVE ARTIFACT /tmp/build.${architecture}.log AS LOCAL build/${package_name}.build.${architecture}.log
     SAVE ARTIFACT /tmp/build.${architecture}.status AS LOCAL build/${package_name}.build.${architecture}.status
     SAVE ARTIFACT /home/build/packages/*.deb AS LOCAL build/
