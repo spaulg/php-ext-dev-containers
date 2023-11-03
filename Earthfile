@@ -21,12 +21,12 @@ build:
     COPY build/php-${version}.tar.gz /home/build/packages/${package_name}_${version}.orig.tar.gz
     RUN tar -xzf /home/build/packages/${package_name}_${version}.orig.tar.gz --strip-components=1 --exclude debian
 
-    # Generate build files from templates
-    RUN make -f debian/rules prepare
-
     # Regenerate changelog with version passed
     RUN rm -f debian/changelog
     RUN debchange --create --package "${package_name}" --distribution stable -v "${version}-${build_number}" "${version}-${build_number} automated build"
+
+    # Generate build files from templates
+    RUN make -f debian/rules prepare
 
     # Add the target architecture and install build dependencies
     RUN sudo dpkg --add-architecture ${arch}
