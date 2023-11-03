@@ -21,6 +21,9 @@ build:
     COPY build/php-${version}.tar.gz /home/build/packages/${package_name}_${version}.orig.tar.gz
     RUN tar -xzf /home/build/packages/${package_name}_${version}.orig.tar.gz --strip-components=1 --exclude debian
 
+    # Generate build files from templates
+    RUN make -f debian/rules prepare
+
     # Regenerate changelog with version passed
     RUN rm -f debian/changelog
     RUN debchange --create --package "${package_name}" --distribution stable -v "${version}-${build_number}" "${version}-${build_number} automated build"
@@ -31,9 +34,6 @@ build:
 
     RUN sudo mk-build-deps -i -r -t "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" --host-arch ${arch}
     RUN rm -f php*-build-deps_*.buildinfo php*-build-deps_*.changes
-
-    # Generate missing build files from templates
-    RUN make -f debian/rules prepare
 
     # Build the package
     RUN debuild -us -uc -a${arch} > /tmp/build.log 2>&1; echo $? > /tmp/build.status
