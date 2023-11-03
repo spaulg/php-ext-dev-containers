@@ -32,39 +32,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup build tools
-        uses: ./.github/actions/setup-build-tools
+      - uses: earthly/actions-setup@v1
         with:
-          sbuildrc-file: 'configs/sbuildrc.pm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Init build environment
+      - name: Fetch php source
         run: |
-          sudo -u "$USER" -E -s ant init
+          curl -fFsL "${{ matrix.asset_url }}" -o build/${{ matrix.filename }}
 
       - name: Build native packages
-        env:
-          SBUILD_LOGS_PATH: ${{ github.workspace }}/logs
         run: |
-          sudo -u "$USER" -E -s ant build -Dversion=${{ matrix.short_version }} -Dsuffix=${{ matrix.suffix }}
-
-      - name: Rename log files
-        if: always()
-        working-directory: logs
-        run: |
-          for source in *.build; do
-            dest=$(echo "$source" | sed -e "s/:/-/"g)
-            mv "$source" "$dest"
-          done
-
-      - name: Attach build logs
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: '${{ matrix.version }} build logs'
-          if-no-files-found: ignore
-          path: |
-            logs/**/*
-            !logs/**/.gitignore
+          earthly +build --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=amd64
+          earthly +build --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=arm64
 
       - name: Save deb files to build
         if: success()

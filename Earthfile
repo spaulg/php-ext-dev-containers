@@ -1,7 +1,7 @@
 VERSION 0.7
 
 build:
-    ARG version="8.2.6"
+    ARG version=""
     ARG suffix=""
     ARG arch="amd64"
     ARG distribution="bullseye"
@@ -18,7 +18,7 @@ build:
     WORKDIR /home/build/packages/${package_name}_${version}${suffix}
 
     # Copy upstream sources
-    COPY build/${package_name}_${version}.orig.tar.gz /home/build/packages/${package_name}_${version}.orig.tar.gz
+    COPY build/php-${version}.tar.gz /home/build/packages/${package_name}_${version}.orig.tar.gz
     RUN tar -xzf /home/build/packages/${package_name}_${version}.orig.tar.gz --strip-components=1 --exclude debian
 
     # Regenerate changelog with version passed
@@ -38,6 +38,8 @@ build:
     # Build the package
     RUN debuild -us -uc -a${arch} > /tmp/build.log 2>&1; echo $? > /tmp/build.status
 
-    SAVE ARTIFACT /tmp/build.log AS LOCAL build/
-    SAVE ARTIFACT /tmp/build.statis AS LOCAL build/
-    SAVE ARTIFACT /home/build/packages/*.deb AS LOCAL build/
+    SAVE ARTIFACT /tmp/build.log AS LOCAL build/${package_name}.build.log
+    SAVE ARTIFACT /tmp/build.status AS LOCAL build/${package_name}.build.status
+    SAVE ARTIFACT --if-exists /home/build/packages/*.deb AS LOCAL build/
+
+    #RUN [ "$(cat /tmp/build.status)" -eq 0 ] || exit 1
