@@ -38,7 +38,7 @@ jobs:
 
       - name: Fetch php source
         run: |
-          curl -fFsL "${{ matrix.asset_url }}" -o build/${{ matrix.asset_filename }}
+          curl -sSfL "${{ matrix.asset_url }}" -o build/${{ matrix.asset_filename }}
 
       - name: Build native packages
         run: |
