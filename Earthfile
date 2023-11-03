@@ -40,6 +40,6 @@ build:
 
     SAVE ARTIFACT /tmp/build.${architecture}.log AS LOCAL build/${package_name}.build.${architecture}.log
     SAVE ARTIFACT /tmp/build.${architecture}.status AS LOCAL build/${package_name}.build.${architecture}.status
-    SAVE ARTIFACT --if-exists /home/build/packages/*.deb AS LOCAL build/
+    SAVE ARTIFACT /home/build/packages/*.deb AS LOCAL build/
 
     #RUN [ "$(cat /tmp/build.status)" -eq 0 ] || exit 1
