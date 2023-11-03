@@ -3,7 +3,7 @@ VERSION 0.7
 build:
     ARG version=""
     ARG suffix=""
-    ARG arch="amd64"
+    ARG architecture="amd64"
     ARG distribution="bullseye"
     ARG build_number="1"
 
@@ -29,17 +29,17 @@ build:
     RUN make -f debian/rules prepare
 
     # Add the target architecture and install build dependencies
-    RUN sudo dpkg --add-architecture ${arch}
+    RUN sudo dpkg --add-architecture ${architecture}
     RUN sudo apt update -y
 
-    RUN sudo mk-build-deps -i -r -t "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" --host-arch ${arch}
+    RUN sudo mk-build-deps -i -r -t "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" --host-arch ${architecture}
     RUN rm -f php*-build-deps_*.buildinfo php*-build-deps_*.changes
 
     # Build the package
-    RUN debuild -us -uc -a${arch} > /tmp/build.log 2>&1; echo $? > /tmp/build.status
+    RUN debuild -us -uc -a${architecture} > /tmp/build.${architecture}.log 2>&1; echo $? > /tmp/build.${architecture}.status
 
-    SAVE ARTIFACT /tmp/build.log AS LOCAL build/${package_name}.build.log
-    SAVE ARTIFACT /tmp/build.status AS LOCAL build/${package_name}.build.status
+    SAVE ARTIFACT /tmp/build.${architecture}.log AS LOCAL build/${package_name}.build.${architecture}.log
+    SAVE ARTIFACT /tmp/build.${architecture}.status AS LOCAL build/${package_name}.build.${architecture}.status
     SAVE ARTIFACT --if-exists /home/build/packages/*.deb AS LOCAL build/
 
     #RUN [ "$(cat /tmp/build.status)" -eq 0 ] || exit 1

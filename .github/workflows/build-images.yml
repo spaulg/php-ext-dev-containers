@@ -46,11 +46,14 @@ jobs:
           earthly +build --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=arm64
 
       - name: Save deb files to build
-        if: success()
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.version }}
-          path: 'build/*.deb'
+          path: |
+            build/*.log
+            build/*.status
+            build/*.deb
 
 
 
