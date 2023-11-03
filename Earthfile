@@ -11,11 +11,11 @@ build:
 
     # Parse the full version to get the short version for the packagen ame
     ENV short_version="$(echo "${version}" | awk -F \. {'print $1"."$2'})"
-    ENV package_name="php${short_version}"
+    ENV package_name="php${short_version}${suffix}"
 
     # Copy debian packaging sources
-    COPY packages/${short_version} /home/build/packages/${package_name}_${version}${suffix}/debian
-    WORKDIR /home/build/packages/${package_name}_${version}${suffix}
+    COPY packages/${short_version} /home/build/packages/${package_name}_${version}/debian
+    WORKDIR /home/build/packages/${package_name}_${version}
 
     # Copy upstream sources
     COPY build/php-${version}.tar.gz /home/build/packages/${package_name}_${version}.orig.tar.gz
@@ -39,9 +39,11 @@ build:
     RUN debuild -us -uc -a${architecture} > /tmp/build.${architecture}.log 2>&1; echo $? > /tmp/build.${architecture}.status
 
     RUN ls -lh /home/build/packages
+    RUN pwd
+    RUN ls -lh ../
 
     SAVE ARTIFACT /tmp/build.${architecture}.log AS LOCAL build/${package_name}.build.${architecture}.log
     SAVE ARTIFACT /tmp/build.${architecture}.status AS LOCAL build/${package_name}.build.${architecture}.status
-    SAVE ARTIFACT /home/build/packages/*.deb AS LOCAL build/
+    SAVE ARTIFACT --if-exists /home/build/packages/*.deb AS LOCAL build/
 
     #RUN [ "$(cat /tmp/build.status)" -eq 0 ] || exit 1
