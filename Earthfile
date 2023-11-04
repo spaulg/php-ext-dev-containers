@@ -38,12 +38,8 @@ build:
     # Build the package
     RUN debuild -us -uc -a${architecture} > /tmp/build.${architecture}.log 2>&1; echo $? > /tmp/build.${architecture}.status
 
-    RUN ls -lh /home/build/packages
-    RUN pwd
-    RUN ls -lh ../
-
-    SAVE ARTIFACT /tmp/build.${architecture}.log AS LOCAL build/${package_name}.build.${architecture}.log
-    SAVE ARTIFACT /tmp/build.${architecture}.status AS LOCAL build/${package_name}.build.${architecture}.status
-    SAVE ARTIFACT --if-exists /home/build/packages/*.deb AS LOCAL build/
+    SAVE ARTIFACT --keep-ts /home/build/packages/*.deb AS LOCAL ./output/
+    SAVE ARTIFACT --keep-ts /tmp/build.${architecture}.log AS LOCAL ./output/${package_name}.build.${architecture}.log
+    SAVE ARTIFACT --keep-ts /tmp/build.${architecture}.status AS LOCAL ./output/${package_name}.build.${architecture}.status
 
     #RUN [ "$(cat /tmp/build.status)" -eq 0 ] || exit 1
