@@ -1,17 +1,15 @@
 VERSION 0.7
 
-build:
+compile:
     ARG version=""
     ARG suffix=""
     ARG architecture="amd64"
     ARG distribution="bullseye"
     ARG build_number="1"
+    ARG short_version=""
+    ARG package_name=""
 
     FROM github.com/spaulg/earthly-debuilder+image --distribution=${distribution}
-
-    # Parse the full version to get the short version for the packagen ame
-    ENV short_version="$(echo "${version}" | awk -F \. {'print $1"."$2'})"
-    ENV package_name="php${short_version}${suffix}"
 
     # Copy debian packaging sources
     COPY packages/${short_version} /home/build/packages/${package_name}_${version}/debian
@@ -42,4 +40,28 @@ build:
     SAVE ARTIFACT --keep-ts /tmp/build.${architecture}.log AS LOCAL ./output/${package_name}.build.${architecture}.log
     SAVE ARTIFACT --keep-ts /tmp/build.${architecture}.status AS LOCAL ./output/${package_name}.build.${architecture}.status
 
-    #RUN [ "$(cat /tmp/build.status)" -eq 0 ] || exit 1
+build:
+    ARG version=""
+    ARG suffix=""
+    ARG architecture="amd64"
+    ARG distribution="bullseye"
+    ARG build_number="1"
+
+    FROM debian:bullseye
+
+    # Parse the full version to get the short version for the packagen ame
+    ENV short_version="$(echo "${version}" | awk -F \. {'print $1"."$2'})"
+    ENV package_name="php${short_version}${suffix}"
+
+    BUILD +compile \
+        --architecture=${architecture} \
+        --distribution=${distribution} \
+        --version=${version} \
+        --suffix=${suffix} \
+        --build_number=${build_number} \
+        --short_version=${short_version} \
+        --package_name=${package_name}
+
+    # Check build status
+    COPY +compile/${package_name}.build.${architecture}.status /tmp/build.status
+    RUN [ "$(cat /tmp/build.status)" -eq 0 ] || exit 1
