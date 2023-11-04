@@ -38,7 +38,7 @@ build:
     # Build the package
     RUN debuild -us -uc -a${architecture} > /tmp/build.${architecture}.log 2>&1; echo $? > /tmp/build.${architecture}.status
 
-    SAVE ARTIFACT --keep-ts /home/build/packages/*.deb AS LOCAL ./output/
+    SAVE ARTIFACT --keep-ts --if-exists /home/build/packages/*.deb AS LOCAL ./output/
     SAVE ARTIFACT --keep-ts /tmp/build.${architecture}.log AS LOCAL ./output/${package_name}.build.${architecture}.log
     SAVE ARTIFACT --keep-ts /tmp/build.${architecture}.status AS LOCAL ./output/${package_name}.build.${architecture}.status
 
