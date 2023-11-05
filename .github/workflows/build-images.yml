@@ -40,10 +40,19 @@ jobs:
         run: |
           curl -sSfL "${{ matrix.asset_url }}" -o build/${{ matrix.asset_filename }}
 
-      - name: Build native packages
+      - name: Build amd64 packages
         run: |
-          earthly +build --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=amd64
-          earthly +build --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=arm64
+          earthly +build --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=amd64 \
+            --log_filename=build.amd64.log --status_filename=build.amd64.status
+
+          [ "$(cat output/build.amd64.status)" -eq 0 ] || false
+
+      - name: Build arm64 packages
+        run: |
+          earthly +build --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=arm64 \
+            --log_filename=build.arm64.log --status_filename=build.arm64.status
+          
+          [ "$(cat output/build.arm64.status)" -eq 0 ] || false
 
       - name: Save deb files to build
         if: always()
