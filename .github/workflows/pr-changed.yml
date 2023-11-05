@@ -1,0 +1,24 @@
+name: 'PR changed'
+
+on:
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  version_matrix:
+    name: Pre Build
+    uses: ./.github/workflows/detect-versions.yml
+    secrets: inherit
+
+  image_build:
+    name: Build
+    needs: ['version_matrix']
+    uses: ./.github/workflows/build-images.yml
+    secrets: inherit
+    with:
+      matrix: ${{ needs.version_matrix.outputs.matrix }}
