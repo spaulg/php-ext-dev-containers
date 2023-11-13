@@ -32,27 +32,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: earthly/actions-setup@v1
+      - uses: actions/setup-go@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          go-version: '1.21'
 
-      - name: Fetch php source
+      - name: Install Dagger CLI
         run: |
-          curl -sSfL "${{ matrix.asset_url }}" -o build/${{ matrix.asset_filename }}
+          cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
 
       - name: Build amd64 packages
         run: |
-          earthly +build --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=amd64 \
-            --log_filename=build.amd64.log --status_filename=build.amd64.status
-
-          [ "$(cat output/build.amd64.status)" -eq 0 ] || false
+          dagger run go run cmd/build/*.go --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=amd64
 
       - name: Build arm64 packages
         run: |
-          earthly +build --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=arm64 \
-            --log_filename=build.arm64.log --status_filename=build.arm64.status
-          
-          [ "$(cat output/build.arm64.status)" -eq 0 ] || false
+          dagger run go run cmd/build/*.go --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=arm64
 
       - name: Save deb files to build
         if: always()
