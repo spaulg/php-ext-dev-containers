@@ -58,7 +58,7 @@ func parseArguments() *BuildParameters {
 
 	flag.Func("suffix", "Package suffix", func(s string) error {
 		for _, r := range s {
-			if !unicode.IsDigit(r) && !unicode.IsLetter(r) {
+			if !unicode.IsDigit(r) && !unicode.IsLetter(r) && r != '-' {
 				return fmt.Errorf("suffix must be alphanumeric")
 			}
 		}
