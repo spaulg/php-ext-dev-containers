@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"dagger.io/dagger"
+	"fmt"
+	"log"
 	"strconv"
 )
 
@@ -23,12 +25,7 @@ func build(buildParameters *BuildParameters, context context.Context, client *da
 		return container, err
 	}
 
-	buildDepsFileName := buildParameters.PackageName + "-build-deps" + "_" + buildParameters.Version + "-" + strconv.Itoa(buildParameters.BuildNumber) + "_" + buildParameters.Architecture
-	buildDepsInfoFileName := buildDepsFileName + ".buildinfo"
-	buildDepsChangesFileName := buildDepsFileName + ".changes"
-	buildDepsDebFileName := buildDepsFileName + ".deb"
-
-	// Build package
+	// Prepare package
 	container = container.
 		WithExec([]string{"cp", "/home/build/source/" + sourceArchiveFileName, "/home/build/packages/" + sourceArchiveFileName}).
 		WithExec([]string{"tar", "-xzf", "/home/build/packages/" + sourceArchiveFileName, "--strip-components=1", "--exclude", "debian"}).
@@ -38,8 +35,32 @@ func build(buildParameters *BuildParameters, context context.Context, client *da
 		WithExec([]string{"make", "-f", "debian/rules", "prepare"}).
 		WithExec([]string{"sudo", "dpkg", "--add-architecture", buildParameters.Architecture}).
 		WithExec([]string{"sudo", "apt", "update", "-y"}).
-		WithExec([]string{"sudo", "mk-build-deps", "-i", "-t", "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y", "--host-arch", buildParameters.Architecture}).
-		WithExec([]string{"rm", "-f", buildDepsInfoFileName, buildDepsChangesFileName, buildDepsDebFileName}).
+		WithExec([]string{"sudo", "mk-build-deps", "-i", "-t", "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y", "--host-arch", buildParameters.Architecture})
+
+	// Clean mk-build-deps files and delete
+	buildDirectory := container.Directory(buildParameters.BuildDirectoryPath)
+	var removeFiles []string
+
+	for _, globPattern := range []string{"**.deb", "**.changes", "**.buildinfo"} {
+		globFiles, err := buildDirectory.Glob(context, globPattern)
+
+		if err != nil {
+			return container, fmt.Errorf("unable to list glob files for cleanup: %v", err)
+		}
+
+		for _, file := range globFiles {
+			log.Println("Removing file: " + file)
+			removeFiles = append(removeFiles, "/"+file)
+		}
+	}
+
+	if len(removeFiles) > 0 {
+		container = container.
+			WithExec(append([]string{"rm", "-f"}, removeFiles...))
+	}
+
+	// Final build
+	container = container.
 		WithExec([]string{"debuild", "-us", "-uc", "-a" + buildParameters.Architecture}, dagger.ContainerWithExecOpts{
 			RedirectStdout: "/home/build/packages/build.log",
 			RedirectStderr: "/home/build/packages/build.log",
