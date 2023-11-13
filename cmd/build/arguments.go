@@ -25,6 +25,7 @@ type BuildParameters struct {
 	ContainerImage     string
 	BuildDirectoryName string
 	BuildDirectoryPath string
+	LogFileName        string
 }
 
 const defaultDistribution = "bullseye"
@@ -32,6 +33,7 @@ const defaultBuildNumber = 1
 const containerImageRepository = "docker.io/spaulg/debuilder"
 const packagePrefix = "php"
 const packageDirectoryBase = "/home/build/packages"
+const defaultLogFileName = "build.log"
 
 // parseArguments parses the command line arguments and returns a BuildParameters struct of validated arguments
 func parseArguments() *BuildParameters {
@@ -39,7 +41,17 @@ func parseArguments() *BuildParameters {
 		Architecture: runtime.GOARCH,
 		Distribution: defaultDistribution,
 		BuildNumber:  defaultBuildNumber,
+		LogFileName:  defaultLogFileName,
 	}
+
+	flag.Func("log-file", "Log file name", func(s string) error {
+		if len(strings.TrimSpace(s)) == 0 {
+			return fmt.Errorf("--log-file argument cannot be empty")
+		}
+
+		buildParameters.LogFileName = s
+		return nil
+	})
 
 	flag.Func("version", "PHP version", func(s string) error {
 		version, err := semver.NewVersion(s)

@@ -23,7 +23,7 @@ func main() {
 	}
 
 	// Export build log
-	_, err = container.File("/home/build/packages/build.log").Export(context, "output", dagger.FileExportOpts{AllowParentDirPath: true})
+	_, err = container.File("/home/build/packages/build.log").Export(context, "output/"+buildParameters.LogFileName)
 
 	if err != nil {
 		log.Println(err)

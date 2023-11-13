@@ -42,11 +42,11 @@ jobs:
 
       - name: Build amd64 packages
         run: |
-          dagger run go run cmd/build/*.go --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=amd64
+          dagger run go run cmd/build/*.go --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=amd64 --log-file=build.amd64.log
 
       - name: Build arm64 packages
         run: |
-          dagger run go run cmd/build/*.go --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=arm64
+          dagger run go run cmd/build/*.go --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=arm64 --log-file=build.arm64.log
 
       - name: Save deb files to build
         if: always()
@@ -56,7 +56,6 @@ jobs:
           if-no-files-found: ignore
           path: |
             output/*.log
-            output/*.status
             output/*.deb
 
 
