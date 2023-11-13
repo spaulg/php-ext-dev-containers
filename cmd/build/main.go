@@ -3,6 +3,7 @@ package main
 import (
 	"dagger.io/dagger"
 	"log"
+	"os"
 )
 
 func main() {
@@ -18,7 +19,7 @@ func main() {
 
 	if err != nil {
 		log.Println(err)
-		return
+		os.Exit(1)
 	}
 
 	// Export build log
@@ -26,7 +27,7 @@ func main() {
 
 	if err != nil {
 		log.Println(err)
-		return
+		os.Exit(1)
 	}
 
 	// Export debian package files
@@ -35,9 +36,10 @@ func main() {
 
 	if err != nil {
 		log.Println(err)
-		return
+		os.Exit(1)
 	}
 
+	exitCode := 0
 	for _, file := range files {
 		_, err = container.
 			Directory("/").
@@ -46,7 +48,9 @@ func main() {
 
 		if err != nil {
 			log.Println(err)
-			return
+			exitCode = 1
 		}
 	}
+
+	os.Exit(exitCode)
 }
