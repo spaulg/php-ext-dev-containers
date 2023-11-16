@@ -144,7 +144,7 @@ def _append_version_entry(version_number: str, version_metadata: dict, matrix: d
     matrix["version"].append(version_number + hyphenated_suffix)
     matrix["include"].append({
         "version": version_number + hyphenated_suffix,
-        "suffix": hyphenated_suffix,
+        "suffix": suffix,
         "package_name": "php" + version_metadata["short_version"] + suffix,
         "package_version": version_metadata["full_version"] + suffix,
         "package_upstream_filename": "php" + version_metadata["short_version"] + suffix + "_" +
