@@ -4,8 +4,10 @@ import (
 	"context"
 	"dagger.io/dagger"
 	"errors"
+	"fmt"
 	"log"
 	"os"
+	"os/exec"
 )
 
 func main() {
@@ -26,40 +28,50 @@ func RunBuild() int {
 	if err != nil && buildParameters.Interactive {
 		log.Println(err)
 
-		RunInteractiveShell(buildParameters, ctx, container)
+		_ = RunInteractiveShell(buildParameters, ctx, container)
 	}
 
 	return ExportArtifacts(buildParameters, ctx, container)
 }
 
-func RunInteractiveShell(buildParameters *BuildParameters, ctx context.Context, container *dagger.Container) {
-	//// todo: export the image in to a tar file
-	//_, err := container.Export(context, ".image.tar")
-	//
-	//if err != nil {
-	//	// todo: handle error
-	//}
-	//
-	//// todo: load the tar using docker/podman
-	//if err = exec.Command("docker", "load", "-qi", ".image.tar").Run(); err != nil {
-	//	// todo: handle error
-	//}
-	//
+func RunInteractiveShell(buildParameters *BuildParameters, ctx context.Context, container *dagger.Container) error {
+	// Export the container image
+	log.Println("Exporting container image")
+	_, err := container.Export(ctx, ".image.tar")
+
+	if err != nil {
+		return fmt.Errorf("failed to export container image: %v", err)
+	}
+
+	defer func() {
+		if err = os.Remove(".image.tar"); err != nil {
+			log.Println(err)
+		}
+	}()
+
+	// Load exported container image
+	log.Println("Loading container image")
+	cmd := exec.Command("docker", "load", "-qi", ".image.tar")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	if err = cmd.Run(); err != nil {
+		return fmt.Errorf("failed to load container image: %v", err)
+	}
+
+	defer func() {
+		//if err = exec.Command("docker", "rmi", "-i", "tagged:image").Run(); err != nil {
+		//	// todo: handle error
+		//}
+	}()
+
 	//// todo: run the image using docker run -it <image> sh
 	//// todo: wait for the process to exit
 	//if err = exec.Command("docker", "run", "-it", "--rm", "tagged:image", "sh").Run(); err != nil {
 	//	// todo: handle error
 	//}
-	//
-	//// todo: remove the image from docker
-	//if err = exec.Command("docker", "rmi", "-i", "tagged:image").Run(); err != nil {
-	//	// todo: handle error
-	//}
-	//
-	//// todo: remove the file from disk
-	//if err = os.Remove(".image.tar"); err != nil {
-	//	// todo: handle error
-	//}
+
+	return nil
 }
 
 func ExportArtifacts(buildParameters *BuildParameters, ctx context.Context, container *dagger.Container) int {
