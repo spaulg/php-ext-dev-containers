@@ -26,7 +26,8 @@ func build(buildParameters *BuildParameters, ctx context.Context, client *dagger
 	}
 
 	// Prepare package
-	container = container.
+	container, err = container.
+		WithExec([]string{"false"}).
 		WithExec([]string{"cp", "/home/build/source/" + sourceArchiveFileName, "/home/build/packages/" + sourceArchiveFileName}).
 		WithExec([]string{"tar", "-xzf", "/home/build/packages/" + sourceArchiveFileName, "--strip-components=1", "--exclude", "debian"}).
 		WithExec([]string{"cp", "-R", "/home/build/source/" + buildParameters.ShortVersion, buildParameters.BuildDirectoryPath + "/debian"}).
@@ -35,7 +36,12 @@ func build(buildParameters *BuildParameters, ctx context.Context, client *dagger
 		WithExec([]string{"make", "-f", "debian/rules", "prepare"}).
 		WithExec([]string{"sudo", "dpkg", "--add-architecture", buildParameters.Architecture}).
 		WithExec([]string{"sudo", "apt", "update", "-y"}).
-		WithExec([]string{"sudo", "mk-build-deps", "-i", "-t", "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y", "--host-arch", buildParameters.Architecture})
+		WithExec([]string{"sudo", "mk-build-deps", "-i", "-t", "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y", "--host-arch", buildParameters.Architecture}).
+		Sync(ctx)
+
+	if err != nil {
+		return container, err
+	}
 
 	// Clean mk-build-deps files and delete
 	buildDirectory := container.Directory(buildParameters.BuildDirectoryPath)
@@ -57,16 +63,17 @@ func build(buildParameters *BuildParameters, ctx context.Context, client *dagger
 	}
 
 	if len(removeFiles) > 0 {
-		container = container.
-			WithExec(append([]string{"rm", "-f"}, removeFiles...))
+		container, err = container.
+			WithExec(append([]string{"rm", "-f"}, removeFiles...)).
+			Sync(ctx)
+
+		if err != nil {
+			return container, err
+		}
 	}
 
 	// Final build
-	container = container.
-		WithExec([]string{"debuild", "-us", "-uc", "-a" + buildParameters.Architecture}, dagger.ContainerWithExecOpts{
-			RedirectStdout: "/home/build/packages/build.log",
-			RedirectStderr: "/home/build/packages/build.log",
-		})
-
-	return container.Sync(ctx)
+	return container.
+		WithExec([]string{"debuild", "-us", "-uc", "-a" + buildParameters.Architecture}).
+		Sync(ctx)
 }
