@@ -27,7 +27,6 @@ func build(buildParameters *BuildParameters, ctx context.Context, client *dagger
 
 	// Prepare package
 	container, err = container.
-		WithExec([]string{"false"}).
 		WithExec([]string{"cp", "/home/build/source/" + sourceArchiveFileName, "/home/build/packages/" + sourceArchiveFileName}).
 		WithExec([]string{"tar", "-xzf", "/home/build/packages/" + sourceArchiveFileName, "--strip-components=1", "--exclude", "debian"}).
 		WithExec([]string{"cp", "-R", "/home/build/source/" + buildParameters.ShortVersion, buildParameters.BuildDirectoryPath + "/debian"}).
