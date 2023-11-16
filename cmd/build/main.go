@@ -76,7 +76,6 @@ func ExportArtifacts(buildParameters *BuildParameters, ctx context.Context, cont
 	_, err := container.File("/home/build/packages/build.log").Export(ctx, "output/"+buildParameters.LogFileName)
 
 	if err != nil {
-		log.Println(err)
 		exitCode = 1
 	}
 
@@ -85,7 +84,6 @@ func ExportArtifacts(buildParameters *BuildParameters, ctx context.Context, cont
 	files, err := directory.Glob(ctx, "**.deb")
 
 	if err != nil {
-		log.Println(err)
 		exitCode = 1
 	} else {
 		for _, file := range files {
