@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func build(buildParameters *BuildParameters, context context.Context, client *dagger.Client) (*dagger.Container, error) {
+func build(buildParameters *BuildParameters, ctx context.Context, client *dagger.Client) (*dagger.Container, error) {
 	var container *dagger.Container
 
 	// Start container
@@ -42,15 +42,17 @@ func build(buildParameters *BuildParameters, context context.Context, client *da
 	var removeFiles []string
 
 	for _, globPattern := range []string{"**.deb", "**.changes", "**.buildinfo"} {
-		globFiles, err := buildDirectory.Glob(context, globPattern)
+		globFiles, err := buildDirectory.Glob(ctx, globPattern)
 
 		if err != nil {
 			return container, fmt.Errorf("unable to list glob files for cleanup: %v", err)
 		}
 
 		for _, file := range globFiles {
+			file = "/" + file
+
 			log.Println("Removing file: " + file)
-			removeFiles = append(removeFiles, "/"+file)
+			removeFiles = append(removeFiles, file)
 		}
 	}
 
@@ -66,5 +68,5 @@ func build(buildParameters *BuildParameters, context context.Context, client *da
 			RedirectStderr: "/home/build/packages/build.log",
 		})
 
-	return container.Sync(context)
+	return container.Sync(ctx)
 }

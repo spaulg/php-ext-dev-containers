@@ -26,6 +26,7 @@ type BuildParameters struct {
 	BuildDirectoryName string
 	BuildDirectoryPath string
 	LogFileName        string
+	Interactive        bool
 }
 
 const defaultDistribution = "bullseye"
@@ -43,6 +44,11 @@ func parseArguments() *BuildParameters {
 		BuildNumber:  defaultBuildNumber,
 		LogFileName:  defaultLogFileName,
 	}
+
+	flag.BoolFunc("interactive", "Interactive", func(s string) error {
+		buildParameters.Interactive = true
+		return nil
+	})
 
 	flag.Func("log-file", "Log file name", func(s string) error {
 		if len(strings.TrimSpace(s)) == 0 {
