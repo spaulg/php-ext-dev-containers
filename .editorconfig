@@ -10,6 +10,6 @@ indent_style = space
 [*.yml]
 indent_size = 2
 
-[rules]
+[{rules,rules.include}]
 indent_style = tab
 indent_size = 8
