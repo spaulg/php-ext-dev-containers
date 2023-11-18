@@ -33,21 +33,14 @@ func RunBuild() int {
 func ExportArtifacts(buildParameters *BuildParameters, ctx context.Context, container *dagger.Container) int {
 	// Create the output directory if it does not exist
 	if _, err := os.Stat("output"); errors.Is(err, os.ErrNotExist) {
-		if err = os.Mkdir("output", 0750); err != nil {
+		if err = os.Mkdir("output", 0755); err != nil {
 			log.Println(err)
 			return 1
 		}
 	}
 
-	// Export build log
-	exitCode := 0
-	_, err := container.File("/home/build/packages/build.log").Export(ctx, "output/"+buildParameters.LogFileName)
-
-	if err != nil {
-		exitCode = 1
-	}
-
 	// Export debian package files
+	exitCode := 0
 	directory := container.Directory("/home/build/packages")
 	files, err := directory.Glob(ctx, "**.deb")
 

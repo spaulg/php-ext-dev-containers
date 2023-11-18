@@ -4,6 +4,7 @@ import (
 	"context"
 	"dagger.io/dagger"
 	"fmt"
+	"github.com/dchest/uniuri"
 	"log"
 	"strconv"
 )
@@ -11,15 +12,38 @@ import (
 func build(buildParameters *BuildParameters, ctx context.Context, client *dagger.Client) (*dagger.Container, error) {
 	var container *dagger.Container
 
-	// Start container
-	container = client.Container().
-		From(buildParameters.ContainerImage).
-		WithDirectory("/home/build/source", client.Host().Directory("assets/source")).
-		WithExec([]string{"mkdir", "-p", buildParameters.BuildDirectoryPath}).
-		WithWorkdir(buildParameters.BuildDirectoryPath)
-
 	// Download source archive
 	sourceArchiveFileName, err := downloadSourceArchive(buildParameters)
+
+	if err != nil {
+		return container, err
+	}
+
+	// Start container
+	container, err = client.Container().
+		From(buildParameters.ContainerImage).
+		Sync(ctx)
+
+	if err != nil {
+		return container, err
+	}
+
+	// Bust cache if required
+	if buildParameters.NoCache {
+		container, err = container.
+			WithEnvVariable("BURST_CACHE", uniuri.New()).
+			Sync(ctx)
+
+		if err != nil {
+			return container, err
+		}
+	}
+
+	container, err = container.
+		WithDirectory("/home/build/source", client.Host().Directory("assets/source")).
+		WithExec([]string{"mkdir", "-p", buildParameters.BuildDirectoryPath}).
+		WithWorkdir(buildParameters.BuildDirectoryPath).
+		Sync(ctx)
 
 	if err != nil {
 		return container, err

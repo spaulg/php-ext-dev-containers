@@ -5,6 +5,7 @@ go 1.21.3
 require (
 	dagger.io/dagger v0.9.3
 	github.com/Masterminds/semver/v3 v3.2.1
+	github.com/dchest/uniuri v1.2.0
 )
 
 require (

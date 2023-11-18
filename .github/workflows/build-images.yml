@@ -40,13 +40,25 @@ jobs:
         run: |
           cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
 
+      - name: Create output directory
+        run: |
+          mkdir -p output
+
       - name: Build amd64 packages
         run: |
-          dagger run go run cmd/build/*.go --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=amd64 --log-file=build.amd64.log
+          dagger run go run cmd/build/*.go \
+            --version=${{ matrix.full_version }} \
+            --suffix=${{ matrix.suffix }} \
+            --architecture=amd64 \
+            2>&1 | tee output/build.amd64.log
 
       - name: Build arm64 packages
         run: |
-          dagger run go run cmd/build/*.go --version=${{ matrix.full_version }} --suffix=${{ matrix.suffix }} --architecture=arm64 --log-file=build.arm64.log
+          dagger run go run cmd/build/*.go \
+            --version=${{ matrix.full_version }} \
+            --suffix=${{ matrix.suffix }} \
+            --architecture=arm64 \
+            2>&1 | tee output/build.arm64.log
 
       - name: Save deb files to build
         if: always()
