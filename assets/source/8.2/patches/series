@@ -26,7 +26,6 @@
 0026-php-5.6.0-oldpcre.patch
 0027-hack-phpdbg-to-explicitly-link-with-libedit.patch
 0028-Remove-W3C-validation-icon-to-not-expose-the-reader-.patch
-0029-Don-t-put-INSTALL_ROOT-into-phar.phar-exec-stanza.patch
 0030-Really-expand-libdir-datadir-into-EXPANDED_LIBDIR-DA.patch
 0031-Fix-ext-date-lib-parse_tz-PATH_MAX-HURD-FTBFS.patch
 0032-Amend-C-11-for-intl-compilation-on-older-distributio.patch
@@ -43,4 +42,3 @@
 0043-Override-result-of-AC_PROG_LN_S-to-fix-FTBFS-on-ppc6.patch
 0044-Update-gcc-func-attr-macro.patch
 0045-scripts-php-.in-Explicitly-define-the-path-to-sed.patch
-0046-Remove-timestamps-from-phar.patch
