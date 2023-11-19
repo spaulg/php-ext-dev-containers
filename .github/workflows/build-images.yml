@@ -45,6 +45,7 @@ jobs:
           mkdir -p output
 
       - name: Build amd64 packages
+        shell: bash
         run: |
           dagger run go run cmd/build/*.go \
             --version=${{ matrix.full_version }} \
@@ -53,6 +54,7 @@ jobs:
             2>&1 | tee output/build.amd64.log
 
       - name: Build arm64 packages
+        shell: bash
         run: |
           dagger run go run cmd/build/*.go \
             --version=${{ matrix.full_version }} \
