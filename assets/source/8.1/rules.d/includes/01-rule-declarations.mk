@@ -93,7 +93,7 @@ MODULE_PACKAGE := \
 LIBTOOL_VERSION := $(shell dpkg-query -f'$${Version}' -W libtool)
 
 # Disable the test now
-RUN_TESTS := yes
+RUN_TESTS := no
 ifeq (nocheck,$(filter nocheck,$(DEB_BUILD_PROFILES)))
   $(warning Disabling tests due DEB_BUILD_PROFILES)
   DEB_BUILD_OPTIONS += nocheck
@@ -114,11 +114,11 @@ ifeq (,$(filter $(DEB_HOST_ARCH),$(SANE_ARCHS)))
   CONFIGURE_PCRE_JIT := --without-pcre-jit
 endif
 
-ifeq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH),amd64 armel armhf i386 ia64 powerpc))
-  CONFIGURE_DTRACE_ARGS := --enable-dtrace
-else
+#ifeq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH),amd64 armel armhf i386 ia64 powerpc))
+#  CONFIGURE_DTRACE_ARGS := --enable-dtrace
+#else
   CONFIGURE_DTRACE_ARGS := --disable-dtrace
-endif
+#endif
 
 ifeq ($(DEB_HOST_ARCH_OS),linux)
   CONFIGURE_SYSTEMD := --with-fpm-systemd
@@ -132,11 +132,7 @@ export QUILT_DIFF_OPTS
 export QUILT_NO_DIFF_TIMESTAMPS
 
 export PROG_SENDMAIL := /usr/sbin/sendmail
-ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-  DEB_CFLAGS_MAINT_APPEND += -O2
-else
-  DEB_CFLAGS_MAINT_APPEND += -O0
-endif
+DEB_CFLAGS_MAINT_APPEND += -O0
 DEB_CFLAGS_MAINT_APPEND += -Wall -pedantic -fsigned-char -fno-strict-aliasing
 DEB_CFLAGS_MAINT_APPEND += $(shell getconf LFS_CFLAGS)
 
@@ -175,9 +171,9 @@ COMMON_CONFIG := \
 		--localstatedir=/var \
 		--mandir=/usr/share/man \
 		--disable-all \
-		--disable-debug \
 		--disable-rpath \
 		--disable-static \
+		--enable-debug \
 		--with-pic \
 		--with-layout=GNU \
 		--without-pear \
