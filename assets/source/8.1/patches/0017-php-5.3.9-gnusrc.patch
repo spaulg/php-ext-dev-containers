@@ -28,7 +28,7 @@ index 962831b..e7dbdfb 100644
  # ifndef YY_CAST
  #  ifdef __cplusplus
 diff --git a/configure.ac b/configure.ac
-index 75d2d75..745d064 100644
+index 46888c4..a9b4890 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -80,6 +80,8 @@ AC_DEFUN([PHP_EXT_DIR],[$config_m4_dir])dnl
@@ -53,7 +53,7 @@ index 36a7a2b..773a644 100644
  #include "php.h"
  #include "zend_exceptions.h"
 diff --git a/ext/standard/file.c b/ext/standard/file.c
-index 548bcc7..bd198ba 100644
+index 8bab360..5938922 100644
 --- a/ext/standard/file.c
 +++ b/ext/standard/file.c
 @@ -104,9 +104,6 @@ php_file_globals file_globals;

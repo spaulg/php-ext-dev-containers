@@ -7,10 +7,10 @@ Subject: Override result of AC_PROG_LN_S to fix FTBFS on ppc64el
  1 file changed, 5 insertions(+)
 
 diff --git a/configure.ac b/configure.ac
-index 0a7606d..0732d37 100644
+index 4c1f848..1216f71 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -135,6 +135,11 @@ AC_PROG_CPP
+@@ -137,6 +137,11 @@ AC_PROG_CPP
  AC_USE_SYSTEM_EXTENSIONS
  AC_PROG_LN_S
  

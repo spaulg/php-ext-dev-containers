@@ -15,20 +15,20 @@ Subject: php-5.3.9-gnusrc
  9 files changed, 5 insertions(+), 9 deletions(-)
 
 diff --git a/Zend/zend_language_parser.c b/Zend/zend_language_parser.c
-index 050663f..ba027c5 100644
+index a6777b9..08762db 100644
 --- a/Zend/zend_language_parser.c
 +++ b/Zend/zend_language_parser.c
-@@ -78,6 +78,8 @@ static YYSIZE_T zend_yytnamerr(char*, const char*);
- #define YYFREE free
- #endif
+@@ -91,6 +91,8 @@ static YYSIZE_T zend_yytnamerr(char*, const char*);
+ #define yydebug         zenddebug
+ #define yynerrs         zendnerrs
  
 +#include <string.h>
 +
  
- /* Substitute the type names.  */
- #define YYSTYPE         ZENDSTYPE
+ # ifndef YY_CAST
+ #  ifdef __cplusplus
 diff --git a/configure.ac b/configure.ac
-index 623864f..3289cc5 100644
+index 0a07ccb..095812a 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -80,6 +80,8 @@ AC_DEFUN([PHP_EXT_DIR],[$config_m4_dir])dnl

@@ -11,7 +11,7 @@ Subject: Lower the OpenSSL requirement to 1.0.1
  5 files changed, 22 insertions(+), 4 deletions(-)
 
 diff --git a/build/php.m4 b/build/php.m4
-index 637b2a1..441d88d 100644
+index 0599d02..89e5ea9 100644
 --- a/build/php.m4
 +++ b/build/php.m4
 @@ -1942,7 +1942,7 @@ dnl
@@ -79,7 +79,7 @@ index 5cfadbe..cd2dc1b 100644
  #elif OPENSSL_VERSION_NUMBER < 0x30000000L
  #define PHP_OPENSSL_API_VERSION 0x10100
 diff --git a/ext/openssl/xp_ssl.c b/ext/openssl/xp_ssl.c
-index 79dd0b4..6252bdd 100644
+index 2e21c13..4ce76c9 100644
 --- a/ext/openssl/xp_ssl.c
 +++ b/ext/openssl/xp_ssl.c
 @@ -33,8 +33,11 @@
@@ -94,7 +94,7 @@ index 79dd0b4..6252bdd 100644
  
  #ifdef PHP_WIN32
  #include "win32/winutil.h"
-@@ -81,8 +84,10 @@
+@@ -86,8 +89,10 @@
  
  #ifndef OPENSSL_NO_TLSEXT
  #define HAVE_TLS_SNI 1
@@ -105,7 +105,7 @@ index 79dd0b4..6252bdd 100644
  
  #if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)
  #define HAVE_SEC_LEVEL 1
-@@ -1273,8 +1278,12 @@ static int php_openssl_set_server_ecdh_curve(php_stream *stream, SSL_CTX *ctx) /
+@@ -1316,8 +1321,12 @@ static int php_openssl_set_server_ecdh_curve(php_stream *stream, SSL_CTX *ctx) /
  
  	zvcurve = php_stream_context_get_option(PHP_STREAM_CONTEXT(stream), "ssl", "ecdh_curve");
  	if (zvcurve == NULL) {

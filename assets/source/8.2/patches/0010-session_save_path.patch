@@ -8,7 +8,7 @@ Subject: session_save_path
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/ext/session/session.c b/ext/session/session.c
-index bd940de..0abf410 100644
+index 6998432..8b59ef2 100644
 --- a/ext/session/session.c
 +++ b/ext/session/session.c
 @@ -778,7 +778,7 @@ static PHP_INI_MH(OnUpdateRfc1867Freq) /* {{{ */
@@ -21,10 +21,10 @@ index bd940de..0abf410 100644
  	PHP_INI_ENTRY("session.save_handler",           "files",     PHP_INI_ALL, OnUpdateSaveHandler)
  	STD_PHP_INI_BOOLEAN("session.auto_start",       "0",         PHP_INI_PERDIR, OnUpdateBool,       auto_start,         php_ps_globals,    ps_globals)
 diff --git a/php.ini-production b/php.ini-production
-index 5ecc303..6cb3f1a 100644
+index d920565..2577043 100644
 --- a/php.ini-production
 +++ b/php.ini-production
-@@ -1374,7 +1374,7 @@ session.save_handler = files
+@@ -1371,7 +1371,7 @@ session.save_handler = files
  ; where MODE is the octal representation of the mode. Note that this
  ; does not overwrite the process's umask.
  ; https://php.net/session.save-path

@@ -13,10 +13,10 @@ Subject: debian_quirks
  7 files changed, 21 insertions(+), 16 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 8344ad1..6521f3d 100644
+index a3f8775..def4ce9 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1153,7 +1153,7 @@ fi
+@@ -1163,7 +1163,7 @@ fi
  PHP_ARG_WITH([pear],
    [whether to install PEAR],
    [AS_HELP_STRING([[--with-pear[=DIR]]],
@@ -25,7 +25,7 @@ index 8344ad1..6521f3d 100644
    [no],
    [yes])
  
-@@ -1184,6 +1184,8 @@ if test "$PHP_PEAR" != "no"; then
+@@ -1194,6 +1194,8 @@ if test "$PHP_PEAR" != "no"; then
    PHP_ADD_MAKEFILE_FRAGMENT($abs_srcdir/pear/Makefile.frag,$abs_srcdir/pear,pear)
  fi
  
@@ -34,7 +34,7 @@ index 8344ad1..6521f3d 100644
  dnl Configuring Zend and TSRM.
  dnl ----------------------------------------------------------------------------
  
-@@ -1325,6 +1327,8 @@ datadir=`eval eval echo $datadir`
+@@ -1335,6 +1337,8 @@ datadir=`eval eval echo $datadir`
  dnl Build extension directory path.
  ZEND_MODULE_API_NO=`$EGREP '#define ZEND_MODULE_API_NO ' $srcdir/Zend/zend_modules.h|"${SED}" 's/#define ZEND_MODULE_API_NO //'`
  
@@ -70,10 +70,10 @@ index a90451f..321b1b3 100644
  ; Windows: "\path1;\path2"
  ;include_path = ".;c:\php\includes"
 diff --git a/sapi/cli/php.1.in b/sapi/cli/php.1.in
-index 98c8dc7..0c5e920 100644
+index 227e4f2..93b5628 100644
 --- a/sapi/cli/php.1.in
 +++ b/sapi/cli/php.1.in
-@@ -365,13 +365,14 @@ Shows configuration for extension
+@@ -374,13 +374,14 @@ Shows configuration for extension
  Show configuration file names
  .SH FILES
  .TP 15

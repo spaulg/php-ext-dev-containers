@@ -13,10 +13,10 @@ Subject: debian_quirks
  7 files changed, 21 insertions(+), 16 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 8687223..f540898 100644
+index 90644b5..1761901 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1194,7 +1194,7 @@ fi
+@@ -1204,7 +1204,7 @@ fi
  PHP_ARG_WITH([pear],
    [whether to install PEAR],
    [AS_HELP_STRING([[--with-pear[=DIR]]],
@@ -25,7 +25,7 @@ index 8687223..f540898 100644
    [no],
    [yes])
  
-@@ -1225,6 +1225,8 @@ if test "$PHP_PEAR" != "no"; then
+@@ -1235,6 +1235,8 @@ if test "$PHP_PEAR" != "no"; then
    PHP_ADD_MAKEFILE_FRAGMENT($abs_srcdir/pear/Makefile.frag,$abs_srcdir/pear,pear)
  fi
  
@@ -34,7 +34,7 @@ index 8687223..f540898 100644
  dnl Configuring Zend and TSRM.
  dnl ----------------------------------------------------------------------------
  
-@@ -1366,6 +1368,8 @@ datadir=`eval eval echo $datadir`
+@@ -1376,6 +1378,8 @@ datadir=`eval eval echo $datadir`
  dnl Build extension directory path.
  ZEND_MODULE_API_NO=`$EGREP '#define ZEND_MODULE_API_NO ' $srcdir/Zend/zend_modules.h|"${SED}" 's/#define ZEND_MODULE_API_NO //'`
  
@@ -44,7 +44,7 @@ index 8687223..f540898 100644
    extbasedir=$ZEND_MODULE_API_NO
    if test "$oldstyleextdir" = "yes"; then
 diff --git a/php.ini-development b/php.ini-development
-index 62320e3..ddf11ac 100644
+index 61cd33e..97592d3 100644
 --- a/php.ini-development
 +++ b/php.ini-development
 @@ -740,7 +740,7 @@ default_charset = "UTF-8"
@@ -57,7 +57,7 @@ index 62320e3..ddf11ac 100644
  ; Windows: "\path1;\path2"
  ;include_path = ".;c:\php\includes"
 diff --git a/php.ini-production b/php.ini-production
-index cb36654..5ecc303 100644
+index 2189660..d920565 100644
 --- a/php.ini-production
 +++ b/php.ini-production
 @@ -742,7 +742,7 @@ default_charset = "UTF-8"
@@ -70,10 +70,10 @@ index cb36654..5ecc303 100644
  ; Windows: "\path1;\path2"
  ;include_path = ".;c:\php\includes"
 diff --git a/sapi/cli/php.1.in b/sapi/cli/php.1.in
-index abf0537..e6a3521 100644
+index f89c93b..93e16d9 100644
 --- a/sapi/cli/php.1.in
 +++ b/sapi/cli/php.1.in
-@@ -365,13 +365,14 @@ Shows configuration for extension
+@@ -374,13 +374,14 @@ Shows configuration for extension
  Show configuration file names
  .SH FILES
  .TP 15

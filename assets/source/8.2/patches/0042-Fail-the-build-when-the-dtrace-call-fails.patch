@@ -7,7 +7,7 @@ Subject: Fail the build when the dtrace call fails
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/build/php.m4 b/build/php.m4
-index 441d88d..512b0dd 100644
+index 89e5ea9..7ba9ce5 100644
 --- a/build/php.m4
 +++ b/build/php.m4
 @@ -2389,7 +2389,8 @@ dnl overwritten (Bug 61268).
