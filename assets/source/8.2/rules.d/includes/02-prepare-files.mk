@@ -133,5 +133,3 @@ debian/source.lintian-overrides: debian/source.lintian-overrides.in debian/rules
 	$(SED) -e "s/@PHP_VERSION@/$(PHP_NAME_VERSION)/g" >$@ <$<
 
 prepare: debian/control debian/source.lintian-overrides
-
-.PHONY: prepare prepared unprepared
