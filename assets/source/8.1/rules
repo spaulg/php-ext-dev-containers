@@ -19,3 +19,5 @@ ext_config     += $(foreach ext_ext,$(ext_EXTENSIONS),$($(ext_ext)_config))
 include $(CURDIR)/debian/rules.d/clean.mk
 include $(CURDIR)/debian/rules.d/build.mk
 include $(CURDIR)/debian/rules.d/binary.mk
+
+.PHONY: prepare prepared unprepared
