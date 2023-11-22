@@ -97,6 +97,8 @@ func build(buildParameters *BuildParameters, ctx context.Context, client *dagger
 
 	// Final build
 	return container.
-		WithExec([]string{"debuild", "-us", "-uc", "-a" + buildParameters.Architecture}).
+		WithExec([]string{"debuild", "-us", "-uc", "-a" + buildParameters.Architecture}, dagger.ContainerWithExecOpts{
+			InsecureRootCapabilities: true,
+		}).
 		Sync(ctx)
 }
