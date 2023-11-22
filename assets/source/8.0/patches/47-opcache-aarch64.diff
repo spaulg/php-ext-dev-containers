@@ -20,3 +20,21 @@ Add aarch64 support to the opcache configuration macro for testing shared memory
        esac
      fi
  
+@@ -219,7 +222,16 @@
+ }
+ ]])],[dnl
+     AC_DEFINE(HAVE_SHM_MMAP_ANON, 1, [Define if you have mmap(MAP_ANON) SHM support])
+-    have_shm_mmap_anon=yes],[have_shm_mmap_anon=no],[have_shm_mmap_anon=no])
++    have_shm_mmap_anon=yes],[have_shm_mmap_anon=no],[
++      case $host_alias in
++        *linux*)
++          have_shm_mmap_anon=yes
++          ;;
++        *)
++          have_shm_mmap_anon=no
++          ;;
++      esac
++    ])
+   AC_MSG_RESULT([$have_shm_mmap_anon])
+ 
+   PHP_CHECK_FUNC_LIB(shm_open, rt, root)
