@@ -20,8 +20,7 @@ func build(buildParameters *BuildParameters, ctx context.Context, client *dagger
 	}
 
 	// Start container
-	platform := "linux/" + buildParameters.Architecture
-	container, err = client.Container(dagger.ContainerOpts{Platform: dagger.Platform(platform)}).
+	container, err = client.Container().
 		From(buildParameters.ContainerImage).
 		Sync(ctx)
 
@@ -58,9 +57,9 @@ func build(buildParameters *BuildParameters, ctx context.Context, client *dagger
 		WithExec([]string{"rm", "-f", "debian/changelog"}).
 		WithExec([]string{"debchange", "--create", "--package", buildParameters.PackageName, "--distribution", "stable", "-v", buildParameters.Version + "-" + strconv.Itoa(buildParameters.BuildNumber), buildParameters.Version + "-" + strconv.Itoa(buildParameters.BuildNumber) + " automated build"}).
 		WithExec([]string{"make", "-f", "debian/rules", "prepare"}).
-		//WithExec([]string{"sudo", "dpkg", "--add-architecture", buildParameters.Architecture}).
+		WithExec([]string{"sudo", "dpkg", "--add-architecture", buildParameters.Architecture}).
 		WithExec([]string{"sudo", "apt", "update", "-y"}).
-		WithExec([]string{"sudo", "mk-build-deps", "-i", "-t", "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y"}). // , "--host-arch", buildParameters.Architecture
+		WithExec([]string{"sudo", "mk-build-deps", "-i", "-t", "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y", "--host-arch", buildParameters.Architecture}).
 		Sync(ctx)
 
 	if err != nil {
@@ -98,6 +97,6 @@ func build(buildParameters *BuildParameters, ctx context.Context, client *dagger
 
 	// Final build
 	return container.
-		WithExec([]string{"debuild", "-us", "-uc"}, dagger.ContainerWithExecOpts{InsecureRootCapabilities: true}). //, "-a" + buildParameters.Architecture
+		WithExec([]string{"debuild", "-us", "-uc", "-a" + buildParameters.Architecture}).
 		Sync(ctx)
 }
