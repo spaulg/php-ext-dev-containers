@@ -106,3 +106,13 @@
 0106-Introduce-max_multipart_body_parts-INI.patch
 0107-NEWS.patch
 0108-fix-NEWS-not-FPM-specific.patch
+0109-Fix-missing-randomness-check-and-insufficient-random.patch
+0110-Fix-GH-11382-add-missing-hash-header-for-bin2hex.patch
+0111-add-cve.patch
+0112-Fix-buffer-mismanagement-in-phar_dir_read.patch
+0113-Sanitize-libxml2-globals-before-parsing.patch
+0114-backport-zend_test-changes-zend_test_override_libxml.patch
+0115-adapt-to-7.2.patch
+0116-NEWS.patch
+0117-Fixed-bug-79412-Opcache-chokes-and-uses-100-CPU-on-s.patch
+0118-Change-the-default-OPcache-optimization-to-7FFEBF5F-.patch
