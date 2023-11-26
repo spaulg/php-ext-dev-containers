@@ -86,23 +86,23 @@ override_dh_strip:
 override_dh_makeshlibs-arch:
 	dh_makeshlibs -a -p$(PHP_LIBEMBED) -V '$(PHP_LIBEMBED) (>= $(PHP_MAJOR_VERSION).$(PHP_MINOR_VERSION))'
 
-override_dh_gencontrol-arch:
-	# Bail-out if PHPAPI has changed
-	stored=$$(cat debian/phpapi); \
-	for sapi in $(REAL_TARGETS); do \
-	    $(SAPI_PACKAGE) \
-	    $${sapi}-build/sapi/cli/php -n -r '$(BUILTIN_EXTENSION_CHECK)' \
-	      >> debian/$${package}.substvars; \
-	    phpapi=$$(sh $${sapi}-build/scripts/php-config --phpapi); \
-	    if [ "$${phpapi}" != "$${stored}" ]; then \
-	        echo "PHPAPI has changed from $${stored} to $${phpapi}, please modify debian/phpapi"; \
-	        exit 1; \
-	    fi; \
-	    echo "php:Provides=phpapi-$${phpapi}" >> debian/$${package}.substvars; \
-	done; \
-	if dpkg --compare-versions $(LIBTOOL_VERSION) gt 2.4.6-0.1~; then \
-	    echo "libtool:Depends=libtool (>= 2.4.6-0.1~)" >> debian/php$(PHP_NAME_VERSION)-dev.substvars; \
-	else \
-	    echo "libtool:Depends=libtool" >> debian/php$(PHP_NAME_VERSION)-dev.substvars; \
-	fi
-	dh_gencontrol -a
+#override_dh_gencontrol-arch:
+#	# Bail-out if PHPAPI has changed
+#	stored=$$(cat debian/phpapi); \
+#	for sapi in $(REAL_TARGETS); do \
+#	    $(SAPI_PACKAGE) \
+#	    $${sapi}-build/sapi/cli/php -n -r '$(BUILTIN_EXTENSION_CHECK)' \
+#	      >> debian/$${package}.substvars; \
+#	    phpapi=$$(sh $${sapi}-build/scripts/php-config --phpapi); \
+#	    if [ "$${phpapi}" != "$${stored}" ]; then \
+#	        echo "PHPAPI has changed from $${stored} to $${phpapi}, please modify debian/phpapi"; \
+#	        exit 1; \
+#	    fi; \
+#	    echo "php:Provides=phpapi-$${phpapi}" >> debian/$${package}.substvars; \
+#	done; \
+#	if dpkg --compare-versions $(LIBTOOL_VERSION) gt 2.4.6-0.1~; then \
+#	    echo "libtool:Depends=libtool (>= 2.4.6-0.1~)" >> debian/php$(PHP_NAME_VERSION)-dev.substvars; \
+#	else \
+#	    echo "libtool:Depends=libtool" >> debian/php$(PHP_NAME_VERSION)-dev.substvars; \
+#	fi
+#	dh_gencontrol -a
