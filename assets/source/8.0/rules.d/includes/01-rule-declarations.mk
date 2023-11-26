@@ -114,11 +114,11 @@ ifeq (,$(filter $(DEB_HOST_ARCH),$(SANE_ARCHS)))
   CONFIGURE_PCRE_JIT := --without-pcre-jit
 endif
 
-ifeq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH),amd64 armel armhf i386 ia64 powerpc))
-  CONFIGURE_DTRACE_ARGS := --enable-dtrace
-else
-  CONFIGURE_DTRACE_ARGS := --disable-dtrace
+ifneq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH),amd64 i386))
+  CONFIGURE_JIT_ARGS := --disable-opcache-jit
 endif
+
+CONFIGURE_DTRACE_ARGS := --disable-dtrace
 
 ifeq ($(DEB_HOST_ARCH_OS),linux)
   CONFIGURE_SYSTEMD := --with-fpm-systemd
@@ -190,7 +190,8 @@ COMMON_CONFIG := \
 		  --with-zlib-dir=/usr \
 		$(CONFIGURE_ZTS) \
 		$(CONFIGURE_DTRACE_ARGS) \
-		$(CONFIGURE_PCRE_JIT)
+		$(CONFIGURE_PCRE_JIT) \
+		$(CONFIGURE_JIT_ARGS)
 
 # disable all SAPIs in extension build
 export ext_config = \
