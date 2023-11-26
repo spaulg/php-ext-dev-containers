@@ -186,3 +186,9 @@
 0186-crypt-Fix-possible-buffer-overread-in-php_crypt.patch
 0187-Fix-array-overrun-when-appending-slash-to-paths.patch
 0188-NEWS.patch
+0189-Fix-missing-randomness-check-and-insufficient-random.patch
+0190-Fix-GH-11382-add-missing-hash-header-for-bin2hex.patch
+0191-add-cve.patch
+0192-Fix-buffer-mismanagement-in-phar_dir_read.patch
+0193-Sanitize-libxml2-globals-before-parsing.patch
+0194-NEWS.patch

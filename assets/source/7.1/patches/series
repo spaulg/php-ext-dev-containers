@@ -141,3 +141,10 @@
 0141-crypt-Fix-possible-buffer-overread-in-php_crypt.patch
 0142-Fix-array-overrun-when-appending-slash-to-paths.patch
 0143-NEWS.patch
+0144-Fix-missing-randomness-check-and-insufficient-random.patch
+0145-Fix-GH-11382-add-missing-hash-header-for-bin2hex.patch
+0146-add-cve.patch
+0147-Fix-buffer-mismanagement-in-phar_dir_read.patch
+0148-Sanitize-libxml2-globals-before-parsing.patch
+0149-NEWS.patch
+0150-Fixed-bug-79412-Opcache-chokes-and-uses-100-CPU-on-s.patch
