@@ -63,3 +63,10 @@
 0063-Introduce-max_multipart_body_parts-INI.patch
 0064-NEWS.patch
 0065-fix-NEWS-not-FPM-specific.patch
+0066-Fix-missing-randomness-check-and-insufficient-random.patch
+0067-Fix-GH-11382-add-missing-hash-header-for-bin2hex.patch
+0068-add-cve.patch
+0069-Fix-buffer-mismanagement-in-phar_dir_read.patch
+0070-Sanitize-libxml2-globals-before-parsing.patch
+0071-NEWS.patch
+0072-backport-zend_test-changes-zend_test_override_libxml.patch

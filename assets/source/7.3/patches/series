@@ -80,3 +80,11 @@
 0080-Introduce-max_multipart_body_parts-INI.patch
 0081-NEWS.patch
 0082-fix-NEWS-not-FPM-specific.patch
+0083-Fix-missing-randomness-check-and-insufficient-random.patch
+0084-Fix-GH-11382-add-missing-hash-header-for-bin2hex.patch
+0085-add-cve.patch
+0086-Fix-buffer-mismanagement-in-phar_dir_read.patch
+0087-Sanitize-libxml2-globals-before-parsing.patch
+0088-backport-zend_test-changes-zend_test_override_libxml.patch
+0089-NEWS.patch
+0090-Change-the-default-OPcache-optimization-to-7FFEBF5F-.patch
