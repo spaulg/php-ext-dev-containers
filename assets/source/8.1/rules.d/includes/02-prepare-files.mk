@@ -115,16 +115,6 @@ remove-files-stamp:
 	  debian/tmp$(PHPIZE_BUILDDIR)/shtool
 	touch remove-files-stamp
 
-ifeq (yes,$(RUN_TESTS))
-	mkdir -p debian/$(PHP_COMMON)/usr/share/doc/$(PHP_COMMON)/
-endif
-
-	$(SED) -i -e's@-ffile-prefix-map=[^ ]*[ ]*@@g' \
-		-e's@-fdebug-prefix-map=[^ ]*[ ]*@@g' \
-		-e's@$(CURDIR)@/tmp/buildd/nonexistent@g' \
-		debian/$(PHP_DEV)/usr/include/php/*/main/build-defs.h \
-		debian/$(PHP_DEV)/usr/bin/php-config$(PHP_NAME_VERSION)
-
 debian/control: debian/control.in debian/rules debian/changelog debian/source.lintian-overrides debian/rules.d/* debian/php-module.control.in
 	$(SED) -e "s/@PHP_VERSION@/$(PHP_NAME_VERSION)/g" -e "s/@BUILT_USING@/$(BUILT_USING)/g" >$@ <$<
 	for ext in $(sort $(ext_PACKAGES)); do \
