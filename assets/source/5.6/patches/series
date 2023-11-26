@@ -208,3 +208,11 @@
 0208-crypt-Fix-possible-buffer-overread-in-php_crypt.patch
 0209-Fix-array-overrun-when-appending-slash-to-paths.patch
 0210-NEWS.patch
+0211-Increase-random-bytes-in-HTTP-Digest-authentication-.patch
+0212-add-cve.patch
+0213-Fix-buffer-mismanagement-in-phar_dir_read.patch
+0214-Sanitize-libxml2-globals-before-parsing.patch
+0215-NEWS.patch
+0216-fix-backport.patch
+0217-Sanitize-libxml2-globals-before-parsing-VC11-compati.patch
+0218-Fix-buffer-mismanagement-in-phar_dir_read-VC11-compa.patch

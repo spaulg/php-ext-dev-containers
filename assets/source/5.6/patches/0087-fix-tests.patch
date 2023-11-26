@@ -267,7 +267,7 @@ index ede25ff..03a4684 100644
  #0 %s%ebug77396.php(%d): PharData->__construct(%s)
  #1 {main}
 diff --git a/ext/phar/tests/create_path_error.phpt b/ext/phar/tests/create_path_error.phpt
-index d457deb..3449b07 100644
+index d457deb2..3449b07 100644
 --- a/ext/phar/tests/create_path_error.phpt
 +++ b/ext/phar/tests/create_path_error.phpt
 @@ -75,10 +75,10 @@ string(5) "query"
