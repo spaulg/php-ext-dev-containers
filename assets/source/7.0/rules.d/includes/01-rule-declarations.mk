@@ -7,6 +7,8 @@ export DH_OPTIONS
 # Hardcode correct absolute path to sed
 export ac_cv_path_SED = $(shell command -v sed)
 
+SANE_ARCHS := amd64 i386 arm64
+
 # Enable parallel builds
 PARALLEL=--parallel
 
@@ -102,16 +104,12 @@ else
     RUN_TESTS := no
   endif
 endif
-ifeq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH),hurd-i386 mips mipsel ppc64 ppc64el armel armhf arm64 kfreebsd-amd64 kfreebsd-i386))
+ifeq (,$(filter $(DEB_HOST_ARCH),$(SANE_ARCHS)))
   $(warning Disabling checks on $(DEB_HOST_ARCH))
   RUN_TESTS := no
 endif
 
-ifeq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH),amd64 armel armhf i386 ia64 powerpc))
-  CONFIGURE_DTRACE_ARGS := --enable-dtrace
-else
-  CONFIGURE_DTRACE_ARGS := --disable-dtrace
-endif
+CONFIGURE_DTRACE_ARGS := --disable-dtrace
 
 ifeq ($(DEB_HOST_ARCH_OS),linux)
   CONFIGURE_SYSTEMD := --with-fpm-systemd
@@ -121,7 +119,8 @@ endif
 # specify some options to our patch system
 QUILT_DIFF_OPTS := -p
 QUILT_NO_DIFF_TIMESTAMPS := 1
-export QUILT_DIFF_OPTS QUILT_NO_DIFF_TIMESTAMPS
+export QUILT_DIFF_OPTS
+export QUILT_NO_DIFF_TIMESTAMPS
 
 export PROG_SENDMAIL := /usr/sbin/sendmail
 ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))

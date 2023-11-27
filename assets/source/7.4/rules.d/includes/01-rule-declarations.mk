@@ -14,13 +14,13 @@ PARALLEL=--parallel
 
 # Enable this for debugging the sed scripts
 #SED=$(CURDIR)/debian/sedsed
-SED := sed
+export SED := /bin/sed
 
 # Make the shell scripts fail after first failed command (important for SAPI loops)
 SHELL := /bin/sh -e
 
 # enable dpkg build flags
-export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all optimize=-lto
 DPKG_EXPORT_BUILDFLAGS = 1
 include /usr/share/dpkg/default.mk
 
@@ -92,25 +92,40 @@ MODULE_PACKAGE := \
 
 LIBTOOL_VERSION := $(shell dpkg-query -f'$${Version}' -W libtool)
 
+# Disable the test now
+RUN_TESTS := no
+ifeq (nocheck,$(filter nocheck,$(DEB_BUILD_PROFILES)))
+  $(warning Disabling tests due DEB_BUILD_PROFILES)
+  DEB_BUILD_OPTIONS += nocheck
+  RUN_TESTS := no
+else
+  ifeq (nocheck,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+    $(warning Disabling tests due DEB_BUILD_OPTIONS)
+    RUN_TESTS := no
+  endif
+endif
+ifeq (,$(filter $(DEB_HOST_ARCH),$(SANE_ARCHS)))
+  $(warning Disabling checks on $(DEB_HOST_ARCH))
+  RUN_TESTS := no
+endif
+
 CONFIGURE_PCRE_JIT :=
 ifeq (,$(filter $(DEB_HOST_ARCH),$(SANE_ARCHS)))
   CONFIGURE_PCRE_JIT := --without-pcre-jit
 endif
 
-ifeq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH),amd64 armel armhf i386 ia64 powerpc))
-  CONFIGURE_DTRACE_ARGS := --enable-dtrace
-else
-  CONFIGURE_DTRACE_ARGS := --disable-dtrace
-endif
+CONFIGURE_DTRACE_ARGS := --disable-dtrace
 
 ifeq ($(DEB_HOST_ARCH_OS),linux)
   CONFIGURE_SYSTEMD := --with-fpm-systemd
+  CONFIGURE_APPARMOR := --with-fpm-apparmor
 endif
 
 # specify some options to our patch system
 QUILT_DIFF_OPTS := -p
 QUILT_NO_DIFF_TIMESTAMPS := 1
-export QUILT_DIFF_OPTS QUILT_NO_DIFF_TIMESTAMPS
+export QUILT_DIFF_OPTS
+export QUILT_NO_DIFF_TIMESTAMPS
 
 export PROG_SENDMAIL := /usr/sbin/sendmail
 ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
@@ -120,6 +135,9 @@ else
 endif
 DEB_CFLAGS_MAINT_APPEND += -Wall -pedantic -fsigned-char -fno-strict-aliasing
 DEB_CFLAGS_MAINT_APPEND += $(shell getconf LFS_CFLAGS)
+
+# OpenSSL 3.0 support
+DEB_CFLAGS_MAINT_APPEND += -DOPENSSL_SUPPRESS_DEPRECATED
 
 # Enable IEEE-conformant floating point math on alphas (not the default)
 ifeq (alpha-linux-gnu,$(DEB_HOST_GNU_TYPE))
@@ -217,7 +235,8 @@ export fpm_config = \
 		--with-config-file-scan-dir=/etc/php/$(PHP_NAME_VERSION)/fpm/conf.d \
 		$(COMMON_CONFIG) \
 		--with-libevent-dir=/usr \
-		$(CONFIGURE_SYSTEMD)
+		$(CONFIGURE_SYSTEMD) \
+		$(CONFIGURE_APPARMOR)
 
 export phpdbg_config = \
 		--prefix=/usr --enable-phpdbg --enable-cli --disable-cgi \

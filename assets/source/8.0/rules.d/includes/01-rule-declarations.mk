@@ -128,7 +128,8 @@ endif
 # specify some options to our patch system
 QUILT_DIFF_OPTS := -p
 QUILT_NO_DIFF_TIMESTAMPS := 1
-export QUILT_DIFF_OPTS QUILT_NO_DIFF_TIMESTAMPS
+export QUILT_DIFF_OPTS
+export QUILT_NO_DIFF_TIMESTAMPS
 
 export PROG_SENDMAIL := /usr/sbin/sendmail
 ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))

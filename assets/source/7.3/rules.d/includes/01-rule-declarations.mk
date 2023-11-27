@@ -114,11 +114,7 @@ ifeq (,$(filter $(DEB_HOST_ARCH),$(SANE_ARCHS)))
   CONFIGURE_PCRE_JIT := --without-pcre-jit
 endif
 
-ifeq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH),amd64 armel armhf i386 ia64 powerpc))
-  CONFIGURE_DTRACE_ARGS := --enable-dtrace
-else
-  CONFIGURE_DTRACE_ARGS := --disable-dtrace
-endif
+CONFIGURE_DTRACE_ARGS := --disable-dtrace
 
 ifeq ($(DEB_HOST_ARCH_OS),linux)
   CONFIGURE_SYSTEMD := --with-fpm-systemd
@@ -128,7 +124,8 @@ endif
 # specify some options to our patch system
 QUILT_DIFF_OPTS := -p
 QUILT_NO_DIFF_TIMESTAMPS := 1
-export QUILT_DIFF_OPTS QUILT_NO_DIFF_TIMESTAMPS
+export QUILT_DIFF_OPTS
+export QUILT_NO_DIFF_TIMESTAMPS
 
 export PROG_SENDMAIL := /usr/sbin/sendmail
 ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))

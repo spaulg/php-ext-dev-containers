@@ -117,7 +117,7 @@ remove-files-stamp:
 
 debian/control: debian/control.in debian/rules debian/changelog debian/source.lintian-overrides debian/rules.d/* debian/php-module.control.in
 	$(SED) -e "s/@PHP_VERSION@/$(PHP_NAME_VERSION)/g" -e "s/@BUILT_USING@/$(BUILT_USING)/g" >$@ <$<
-	for ext in $(ext_PACKAGES); do \
+	for ext in $(sort $(ext_PACKAGES)); do \
 	  package=php$(PHP_NAME_VERSION)-$${ext}; \
 	  description=$$(eval echo \$${$${ext}_DESCRIPTION}); \
 	  echo >>$@; \

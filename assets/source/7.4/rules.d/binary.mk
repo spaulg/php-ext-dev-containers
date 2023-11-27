@@ -41,6 +41,16 @@ override_dh_install-arch: remove-files-stamp prepare-fpm-pools
 	    -e'/disable_functions =/ s/$$/ $(PCNTL_FUNCTIONS)/g;' \
 	  > debian/$(PHP_COMMON)/usr/lib/php/$(PHP_NAME_VERSION)/php.ini-development
 
+ifeq (yes,$(RUN_TESTS))
+	mkdir -p debian/$(PHP_COMMON)/usr/share/doc/$(PHP_COMMON)/
+endif
+
+	$(SED) -i -e's@-ffile-prefix-map=[^ ]*[ ]*@@g' \
+		-e's@-fdebug-prefix-map=[^ ]*[ ]*@@g' \
+		-e's@$(CURDIR)@/tmp/buildd/nonexistent@g' \
+		debian/$(PHP_DEV)/usr/include/php/*/main/build-defs.h \
+		debian/$(PHP_DEV)/usr/bin/php-config$(PHP_NAME_VERSION)
+
 override_dh_installdocs-indep:
 	dh_installdocs -i
 
@@ -81,9 +91,9 @@ override_dh_makeshlibs-arch:
 #	stored=$$(cat debian/phpapi); \
 #	for sapi in $(REAL_TARGETS); do \
 #	    $(SAPI_PACKAGE) \
-#	    /usr/bin/php -n -r '$(BUILTIN_EXTENSION_CHECK)' \
+#	    $${sapi}-build/sapi/cli/php -n -r '$(BUILTIN_EXTENSION_CHECK)' \
 #	      >> debian/$${package}.substvars; \
-#	    phpapi=$$(sh /usr/bin/php-config7.4 --phpapi); \
+#	    phpapi=$$(sh $${sapi}-build/scripts/php-config --phpapi); \
 #	    if [ "$${phpapi}" != "$${stored}" ]; then \
 #	        echo "PHPAPI has changed from $${stored} to $${phpapi}, please modify debian/phpapi"; \
 #	        exit 1; \
