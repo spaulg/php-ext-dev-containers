@@ -26,3 +26,14 @@
  
    PHP_NEW_EXTENSION(fileinfo, fileinfo.c $libmagic_sources, $ext_shared,,-I@ext_srcdir@/libmagic)
    PHP_ADD_BUILD_DIR($ext_builddir/libmagic)
+--- a/configure.ac
++++ b/configure.ac
+@@ -8,7 +8,7 @@
+ dnl Basic autoconf + automake initialization, generation of config.nice.
+ dnl -------------------------------------------------------------------------
+ 
+-AC_PREREQ(2.59)
++AC_PREREQ([2.68])
+ AC_INIT(README.GIT-RULES)
+ ifdef([AC_PRESERVE_HELP_ORDER], [AC_PRESERVE_HELP_ORDER], [])
+ 
