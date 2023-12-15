@@ -116,3 +116,4 @@
 0116-NEWS.patch
 0117-Fixed-bug-79412-Opcache-chokes-and-uses-100-CPU-on-s.patch
 0118-Change-the-default-OPcache-optimization-to-7FFEBF5F-.patch
+0119-autoconf-2.68.patch

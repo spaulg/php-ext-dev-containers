@@ -148,3 +148,4 @@
 0148-Sanitize-libxml2-globals-before-parsing.patch
 0149-NEWS.patch
 0150-Fixed-bug-79412-Opcache-chokes-and-uses-100-CPU-on-s.patch
+0151-autoconf-2.68.patch

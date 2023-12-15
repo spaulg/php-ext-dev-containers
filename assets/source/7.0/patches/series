@@ -192,3 +192,4 @@
 0192-Fix-buffer-mismanagement-in-phar_dir_read.patch
 0193-Sanitize-libxml2-globals-before-parsing.patch
 0194-NEWS.patch
+0195-autoconf-2.68.patch
