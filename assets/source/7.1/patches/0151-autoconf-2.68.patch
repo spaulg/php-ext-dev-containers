@@ -144,7 +144,7 @@
      AC_DEFINE([HAVE_FLOCK_LINUX], [], [Struct flock is Linux-type])
      AC_MSG_RESULT("yes")
 -], AC_MSG_RESULT("no") )
-+], [AC_MSG_RESULT("no")], [AC_MSG_RESULT([no])])
++], [AC_MSG_RESULT("no")], [AC_MSG_RESULT([yes])])
  
  AC_MSG_CHECKING("whether flock struct is BSD ordered")
 -AC_TRY_RUN([
