@@ -134,7 +134,7 @@
    #include <fcntl.h>
    struct flock lock = { 1, 2, 3, 4, 5 };
    int main() {
-@@ -354,14 +354,14 @@
+@@ -354,14 +354,18 @@
      }
      return 1;
    }
@@ -144,7 +144,11 @@
      AC_DEFINE([HAVE_FLOCK_LINUX], [], [Struct flock is Linux-type])
      AC_MSG_RESULT("yes")
 -], AC_MSG_RESULT("no") )
-+], [AC_MSG_RESULT("no")], [AC_MSG_RESULT([yes])])
++], [AC_MSG_RESULT("no")], [
++  flock_type=linux
++  AC_DEFINE([HAVE_FLOCK_LINUX], [], [Struct flock is Linux-type])
++  AC_MSG_RESULT("yes")
++])
  
  AC_MSG_CHECKING("whether flock struct is BSD ordered")
 -AC_TRY_RUN([
@@ -152,7 +156,7 @@
    #include <fcntl.h>
    struct flock lock = { 1, 2, 3, 4, 5 };
    int main() {
-@@ -370,11 +370,11 @@
+@@ -370,11 +374,11 @@
      }
      return 1;
    }
