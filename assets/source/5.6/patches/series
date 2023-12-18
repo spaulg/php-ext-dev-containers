@@ -163,6 +163,7 @@
 0163-remove-deprecated-call-and-deprecate-function-to-be-.patch
 0164-Patch-mysql-with-utf8mb4-character-set.patch
 0165-Show-packaging-credits.patch
+0219-autoconf-2.68.patch
 0166-Allow-printing-credits-buffer-larger-than-4k.patch
 0167-Fix-80710-imap_mail_compose-header-injection.patch
 0168-Add-missing-NEWS-entry-for-80710.patch
