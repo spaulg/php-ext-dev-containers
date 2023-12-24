@@ -15,10 +15,10 @@ jobs:
     uses: ./.github/workflows/detect-versions.yml
     secrets: inherit
 
-  image_build:
-    name: Build
+  build_packages:
+    name: Build Packages
     needs: ['version_matrix']
-    uses: ./.github/workflows/build-images.yml
+    uses: ./.github/workflows/build-packages.yml
     secrets: inherit
     with:
       matrix: ${{ needs.version_matrix.outputs.matrix }}
