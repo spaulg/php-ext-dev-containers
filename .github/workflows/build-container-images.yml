@@ -39,3 +39,12 @@ jobs:
       - name: Install Dagger CLI
         run: |
           cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
+
+      - name: Build amd64 packages
+        shell: bash
+        run: |
+          dagger run go run cmd/build_images/*.go \
+            --version=${{ matrix.full_version }} \
+            --suffix=${{ matrix.suffix }} \
+            --architecture=amd64 \
+            2>&1 | tee output/build.amd64.log

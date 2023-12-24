@@ -22,3 +22,11 @@ jobs:
     secrets: inherit
     with:
       matrix: ${{ needs.version_matrix.outputs.matrix }}
+
+  build_images:
+    name: Build Container Images
+    needs: ['version_matrix', 'build_packages']
+    uses: ./.github/workflows/build-container-images.yml
+    secrets: inherit
+    with:
+      matrix: ${{ needs.version_matrix.outputs.matrix }}
