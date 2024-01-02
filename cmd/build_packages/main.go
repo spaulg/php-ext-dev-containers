@@ -5,6 +5,7 @@ import (
 	"dagger.io/dagger"
 	"errors"
 	"log"
+	"main/internal/pkg/build"
 	"os"
 )
 
@@ -14,14 +15,14 @@ func main() {
 
 func RunBuild() int {
 	// Parse command arguments to capture build information
-	buildParameters := parseArguments()
+	buildParameters := build.ParseArguments()
 
 	// Connect Dagger client
-	ctx, client := connectDaggerClient()
+	ctx, client := build.ConnectDaggerClient()
 	defer client.Close()
 
 	// Build package
-	container, err := build(buildParameters, ctx, client)
+	container, err := buildOutput(buildParameters, ctx, client)
 
 	if err != nil {
 		log.Println(err)
@@ -30,7 +31,7 @@ func RunBuild() int {
 	return ExportArtifacts(buildParameters, ctx, container)
 }
 
-func ExportArtifacts(buildParameters *BuildParameters, ctx context.Context, container *dagger.Container) int {
+func ExportArtifacts(buildParameters *build.BuildParameters, ctx context.Context, container *dagger.Container) int {
 	// Create the output directory if it does not exist
 	if _, err := os.Stat("output"); errors.Is(err, os.ErrNotExist) {
 		if err = os.Mkdir("output", 0755); err != nil {

@@ -6,10 +6,11 @@ import (
 	"fmt"
 	"github.com/dchest/uniuri"
 	"log"
+	"main/internal/pkg/build"
 	"strconv"
 )
 
-func build(buildParameters *BuildParameters, ctx context.Context, client *dagger.Client) (*dagger.Container, error) {
+func buildOutput(buildParameters *build.BuildParameters, ctx context.Context, client *dagger.Client) (*dagger.Container, error) {
 	var container *dagger.Container
 
 	// Download source archive

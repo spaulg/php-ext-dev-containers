@@ -1,4 +1,4 @@
-package main
+package build
 
 import (
 	"flag"
@@ -34,8 +34,8 @@ const containerImageRepository = "docker.io/spaulg/debuilder"
 const packagePrefix = "php"
 const packageDirectoryBase = "/home/build/packages"
 
-// parseArguments parses the command line arguments and returns a BuildParameters struct of validated arguments
-func parseArguments() *BuildParameters {
+// ParseArguments parses the command line arguments and returns a BuildParameters struct of validated arguments
+func ParseArguments() *BuildParameters {
 	buildParameters := BuildParameters{
 		Architecture: runtime.GOARCH,
 		Distribution: defaultDistribution,

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"main/internal/pkg/build"
 	"net/http"
 	"os"
 	"strings"
@@ -21,7 +22,7 @@ type PhpVersion struct {
 	Museum bool              `json:"museum"`
 }
 
-func downloadSourceArchive(buildParameters *BuildParameters) (string, error) {
+func downloadSourceArchive(buildParameters *build.BuildParameters) (string, error) {
 	sourceArchiveName := fmt.Sprintf("%s_%s.orig.tar.gz", buildParameters.PackageName, buildParameters.Version)
 
 	_, err := os.Stat("assets/source/" + sourceArchiveName)
@@ -61,7 +62,7 @@ func downloadSourceArchive(buildParameters *BuildParameters) (string, error) {
 	return sourceArchiveName, nil
 }
 
-func resolveDownloadUrl(buildParameters *BuildParameters) (string, error) {
+func resolveDownloadUrl(buildParameters *build.BuildParameters) (string, error) {
 	// Fetch release metadata
 	resp, err := http.Get("https://www.php.net/releases/index.php?json&version=" + buildParameters.Version)
 	if err != nil {

@@ -1,4 +1,4 @@
-package main
+package build
 
 import (
 	"context"
@@ -6,8 +6,8 @@ import (
 	"os"
 )
 
-// connectDaggerClient creates a Dagger client and connects to the Dagger engine
-func connectDaggerClient() (context.Context, *dagger.Client) {
+// ConnectDaggerClient creates a Dagger client and connects to the Dagger engine
+func ConnectDaggerClient() (context.Context, *dagger.Client) {
 	ctx := context.Background()
 
 	client, err := dagger.Connect(ctx, dagger.WithLogOutput(os.Stdout))
